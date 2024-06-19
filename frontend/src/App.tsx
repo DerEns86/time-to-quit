@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Container} from "@mui/material";
+import { Container} from "@mui/material";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import axios from "axios";
@@ -53,7 +53,7 @@ function App() {
 
     return (
         <Container disableGutters>
-            <Header/>
+            <Header user={user} logout={logout}/>
 
             <Container >
             <Routes>
@@ -64,16 +64,6 @@ function App() {
                 </Route>
             </Routes>
 
-            {user && <p>{user.name} {user.login} {user.id}</p>}
-
-            {user && <Button variant="outlined" onClick={loadUser}>
-                Me
-            </Button>
-            }
-            {user && <Button variant="outlined" onClick={logout}>
-                logout
-            </Button>
-            }
             </Container>
 
         </Container>

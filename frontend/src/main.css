@@ -1,15 +1,10 @@
-
 :root{
     background-color: #eaeaea;
+    font-family: 'Roboto', sans-serif;
 }
 
 body{
     margin: 0;
-    background-color: #eaeaea;
-}
-
-.wrapper{
-    height: 100vh;
 }
 
 header{
@@ -17,6 +12,7 @@ header{
     color: #eaeaea;
     padding: 10px 24px;
     text-align: center;
+    height: 60px;
 }
 
 .githubLogo {
