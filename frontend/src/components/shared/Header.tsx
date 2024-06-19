@@ -31,7 +31,7 @@ export default function Header({user, logout}: Readonly<HeaderProps>) {
                 {user && (
                     <div>
                         <Button onClick={handleClick} sx={{width: '24px', height: '24px', minWidth: 'unset', p: 0}}>
-                            <Avatar sx={{color: 'black', width: 1, height: 1}}/>
+                            <Avatar sx={{color: 'black', width: 1, height: 1}} src={user.avatar_url} alt={user.name}/>
                         </Button>
                         <Menu
                             anchorEl={anchorEl}
