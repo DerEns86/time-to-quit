@@ -1,0 +1,22 @@
+:root{
+    background-color: #eaeaea;
+    font-family: 'Roboto', sans-serif;
+}
+
+body{
+    margin: 0;
+}
+
+header{
+    background-color: #1A73E8;
+    color: #eaeaea;
+    padding: 10px 24px;
+    text-align: center;
+    height: 60px;
+}
+
+.githubLogo {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}

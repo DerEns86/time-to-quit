@@ -9,6 +9,7 @@ export default function Home(props: Readonly<HomeProps>) {
         <div>
             <h1>Home</h1>
             <p>Welcome {props.user?.name}</p>
+            <p>{props.user?.id}</p>
         </div>
     )
 }
