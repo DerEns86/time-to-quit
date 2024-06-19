@@ -1,15 +1,20 @@
 import {useEffect, useState} from 'react'
 import { Button } from "@mui/material";
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import axios from "axios";
+import { githubUser } from "./model/userModel.ts";
+import ProtectedRoute from "./ProtectedRoute.tsx";
+import Home from "./pages/Home.tsx";
 
 
 function App() {
-    const [user, setUser] = useState()
+    const [user, setUser] = useState<githubUser | null | undefined>(undefined)
+    const navigate = useNavigate();
 
     useEffect(() => {
-        loadUser();
+                loadUser();
+                console.log(user);
     }, []);
 
 
@@ -19,11 +24,28 @@ function App() {
 
     }
 
+    function logout() {
+        const host =
+            window.location.host === "localhost:5173"
+                ? "http://localhost:8080"
+                : window.location.origin;
+
+        window.open(host + "/logout", "_self");
+    }
+
     const loadUser = () => {
         axios.get("/api/users/me")
             .then(response => {
-                setUser(response.data)
-                console.log(response.data)
+                setUser(response.data || null);
+                console.log(response.data);
+                if(!response.data){
+                    navigate("/login");
+                } else {
+                    navigate("/");
+                }
+            }).catch(()=>{
+                setUser(null);
+                navigate("/login")
             })
     }
 
@@ -31,19 +53,30 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login user={user} login={login}/>} />
+
+        <Route element={<ProtectedRoute user={user} />}>
+          <Route path="/" element={<Home user={user} />} />
+        </Route>
       </Routes>
       <h1>Vite + React</h1>
 
-        <p>{user}</p>
+        {user === undefined && <p>Not logged in</p>}
+        {user && <p>{user.name} {user.login} {user.id}</p>}
 
-        <Button variant="outlined" onClick={login}>
-          Login
+
+
+
+        {user && <Button variant="outlined" onClick={loadUser}>
+            Me
         </Button>
-        <Button variant="outlined" onClick={loadUser}>
-          Me
+        }
+
+        {user && <Button variant="outlined" onClick={logout}>
+            logout
         </Button>
+        }
+
 
     </>
   )
