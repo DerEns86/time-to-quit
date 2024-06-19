@@ -49,7 +49,7 @@ class UserIntegrationTest {
     @Test
     @WithMockUser
     void testGetMe() throws Exception {
-        mockMvc.perform(get("/api/users/me")
+        mockMvc.perform(get("/api/auth/me")
                         .with(SecurityMockMvcRequestPostProcessors.authentication(
                                 new OAuth2AuthenticationToken(oAuth2User, oAuth2User.getAuthorities(), "client-1"))))
                 .andExpect(status().isOk())
@@ -59,7 +59,7 @@ class UserIntegrationTest {
 
     @Test
     void testGetMe_withNotLoggedInUser_expectError() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/me"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/me"))
                 .andExpect(status().isUnauthorized());
 
     }

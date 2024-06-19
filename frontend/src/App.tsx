@@ -35,7 +35,7 @@ function App() {
     }
 
     const loadUser = () => {
-        axios.get("/api/users/me")
+        axios.get("/api/auth/me")
             .then(response => {
                 setUser(response.data || null);
                 console.log(response.data);
