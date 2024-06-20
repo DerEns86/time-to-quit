@@ -42,7 +42,7 @@ function App() {
                 if (!response.data) {
                     navigate("/login");
                 } else {
-                    navigate("/");
+                    navigate(`/${response.data.id}`);
                 }
             }).catch(() => {
             setUser(null);
@@ -58,9 +58,9 @@ function App() {
             <Container >
             <Routes>
                 <Route path="/login" element={<Login user={user} login={login}/>}/>
-
+                <Route path="/" element={<Home user={user}/>}/>
                 <Route element={<ProtectedRoute user={user}/>}>
-                    <Route path="/" element={<Home user={user}/>}/>
+                    <Route path="/:id" element={<Home user={user}/>}/>
                 </Route>
             </Routes>
 
