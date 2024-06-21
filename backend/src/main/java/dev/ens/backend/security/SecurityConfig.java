@@ -1,5 +1,8 @@
 package dev.ens.backend.security;
 
+import dev.ens.backend.model.AppUser;
+import dev.ens.backend.user.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,23 +11,31 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
+import java.util.Collections;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Value("${app.url}")
     private String appUrl;
+
+    private final UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/api/auth/me").authenticated()
-                        .requestMatchers("/api/secured").authenticated()
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
@@ -36,5 +47,28 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID"));
         return http.build();
+    }
+
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+        DefaultOAuth2UserService userService = new DefaultOAuth2UserService();
+
+        return userRequest -> {
+            OAuth2User githubUser = userService.loadUser(userRequest);
+
+            AppUser user = userRepository.findById(githubUser.getName())
+                    .orElseGet(() -> {
+                        AppUser newUser = new AppUser(githubUser.getName(),
+                                githubUser.getName(),
+                                githubUser.getAttributes().get("name").toString(),
+                                0,
+                                Collections.emptyList(),
+                                null);
+
+                        return userRepository.save(newUser);
+                    });
+
+            return githubUser;
+        };
     }
 }
