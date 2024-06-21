@@ -40,13 +40,13 @@ function App() {
                 setUser(response.data || null);
                 console.log(response.data);
                 if (!response.data) {
-                    navigate("/login");
+                    navigate("/");
                 } else {
-                    navigate(`/${response.data.id}`);
+                    navigate("/home");
                 }
             }).catch(() => {
             setUser(null);
-            navigate("/login")
+            navigate("/")
         })
     }
 
@@ -57,10 +57,11 @@ function App() {
 
             <Container >
             <Routes>
-                <Route path="/login" element={<Login user={user} login={login}/>}/>
-                <Route path="/" element={<Home user={user}/>}/>
+                <Route path="/" element={<Login user={user} login={login}/>}/>
+
                 <Route element={<ProtectedRoute user={user}/>}>
-                    <Route path="/:id" element={<Home user={user}/>}/>
+                    <Route path="/home" element={<Home user={user}/>}/>
+                    {/*<Route path="/:id" element={<Home user={user}/>}/>*/}
                 </Route>
             </Routes>
 
