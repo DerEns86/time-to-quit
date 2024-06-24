@@ -60,6 +60,7 @@ public class SecurityConfig {
                     .orElseGet(() -> {
                         AppUser newUser = new AppUser(githubUser.getName(),
                                 githubUser.getName(),
+                                githubUser.getAttributes().get("avatar_url").toString(),
                                 githubUser.getAttributes().get("name").toString(),
                                 0,
                                 Collections.emptyList(),

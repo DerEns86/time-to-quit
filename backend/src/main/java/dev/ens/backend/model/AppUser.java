@@ -11,6 +11,7 @@ public record AppUser(
         @Id
         String id,
         String githubId,
+        String avatar_url,
         String username,
         int dailySmokedCigarettes,
         List<String> mainMotivation,
