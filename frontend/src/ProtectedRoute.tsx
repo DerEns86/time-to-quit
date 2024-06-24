@@ -8,7 +8,10 @@ type ProtectedRouteProps = {
 export default function ProtectedRoute(props: ProtectedRouteProps) {
     const isAuthenticated = props.user !== undefined && props.user !== null;
 
-    return(
-        isAuthenticated ? <Outlet /> : <Navigate to="/login" />
-    )
+    if (props.user === undefined){
+        return <div>Loading...</div>
+    }
+
+    return isAuthenticated ? <Outlet /> : <Navigate to="/" />
+
 }

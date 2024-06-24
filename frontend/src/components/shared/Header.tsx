@@ -24,6 +24,8 @@ export default function Header({user, logout}: Readonly<HeaderProps>) {
         handleClose();
     };
 
+    console.log('User data in Header:', user);
+
     return (
         <header>
             <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", height: 1}}>
@@ -31,7 +33,7 @@ export default function Header({user, logout}: Readonly<HeaderProps>) {
                 {user && (
                     <div>
                         <Button onClick={handleClick} sx={{width: '24px', height: '24px', minWidth: 'unset', p: 0}}>
-                            <Avatar sx={{color: 'black', width: 1, height: 1}} src={user.avatar_url} alt={user.name}/>
+                            <Avatar sx={{color: 'black', width: 1, height: 1}} src={user.avatar_url} alt={user.username}/>
                         </Button>
                         <Menu
                             anchorEl={anchorEl}
