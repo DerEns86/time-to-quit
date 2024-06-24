@@ -35,7 +35,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/api/auth/me").authenticated()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
@@ -56,9 +56,9 @@ public class SecurityConfig {
         return userRequest -> {
             OAuth2User githubUser = userService.loadUser(userRequest);
 
-            AppUser user = userRepository.findById(githubUser.getName())
+            AppUser user = userRepository.findById(githubUser.getAttributes().get("id").toString())
                     .orElseGet(() -> {
-                        AppUser newUser = new AppUser(githubUser.getName(),
+                        AppUser newUser = new AppUser(githubUser.getAttributes().get("id").toString(),
                                 githubUser.getName(),
                                 githubUser.getAttributes().get("avatar_url").toString(),
                                 githubUser.getAttributes().get("name").toString(),
