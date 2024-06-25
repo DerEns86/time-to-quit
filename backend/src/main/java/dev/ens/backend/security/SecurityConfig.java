@@ -31,6 +31,11 @@ public class SecurityConfig {
     private final UserRepository userRepository;
 
     @Bean
+    public DefaultOAuth2UserService defaultOAuth2UserService() {
+        return new DefaultOAuth2UserService();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -50,8 +55,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
-        DefaultOAuth2UserService userService = new DefaultOAuth2UserService();
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService(DefaultOAuth2UserService userService) {
+//        DefaultOAuth2UserService userService = new DefaultOAuth2UserService();
 
         return userRequest -> {
             OAuth2User githubUser = userService.loadUser(userRequest);
