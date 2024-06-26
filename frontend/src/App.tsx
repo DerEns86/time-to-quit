@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react'
-import {Container} from "@mui/material";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import {githubUser} from "./model/userModel.ts";
@@ -27,20 +26,18 @@ function App() {
 
 
     return (
-        <Container disableGutters>
+        <>
             <Header user={user} logout={logout}/>
 
-            <Container>
-                <Routes>
-                    <Route path="/" element={<Login user={user} login={login}/>}/>
+            <Routes>
+                <Route path="/" element={<Login user={user} login={login}/>}/>
 
-                    <Route element={<ProtectedRoute user={user}/>}>
-                        <Route path="/home" element={<Home user={user}/>}/>
-                        {/*<Route path="/:id" element={<Home user={user}/>}/>*/}
-                    </Route>
-                </Routes>
-            </Container>
-        </Container>
+                <Route element={<ProtectedRoute user={user}/>}>
+                    <Route path="/home" element={<Home user={user}/>}/>
+                    {/*<Route path="/:id" element={<Home user={user}/>}/>*/}
+                </Route>
+            </Routes>
+        </>
     )
 }
 
