@@ -42,6 +42,17 @@ export default function Home(props: Readonly<HomeProps>) {
                 <p >{props.user?.mainMotivation[1]}</p>
                 <p >{props.user?.quitDate ? new Date(props.user.quitDate).toLocaleDateString() : 'N/A'}</p>
                 <p >{props.user?.avatar_url}</p>
+
+                <h3>Goals</h3>
+                {props.user?.goals.map((goal) => (
+                    <div key={goal.goalId}>
+                        <p>Goal ID: {goal.goalId}</p>
+                        <p>Goal Name: {goal.goalName}</p>
+                        <p>Goal Price: {goal.goalPrice}</p>
+                        <p>Created At: {goal.createAt}</p>
+                        <p>Is Completed: {goal.isCompleted ? 'Yes' : 'No'}</p>
+                    </div>
+                ))}
             </Box>
         </div>
     )

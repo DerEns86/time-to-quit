@@ -1,3 +1,5 @@
+import {Goal} from "./goal.ts";
+
 export type githubUser = {
     id: string;
     githubId: string;
@@ -6,4 +8,6 @@ export type githubUser = {
     mainMotivation: string[];
     quitDate: string;
     avatar_url: string;
+    goals: Goal[];
+
 }
