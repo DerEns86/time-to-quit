@@ -33,8 +33,8 @@ class AppUserServiceTest {
     void getUsers_shouldReturnListOfUsers_whenCalled() {
         //GIVEN
         Instant fixedInstant = Instant.parse("2024-06-20T10:15:30.00Z");
-        List<AppUser> expected = List.of(new AppUser("1", "123", "avatar_url" ,"username", 2 ,List.of("test1", "test2"),  fixedInstant));
-        when(userRepository.findAll()).thenReturn(List.of(new AppUser("1", "123","avatar_url" , "username", 2 ,List.of("test1", "test2"),  fixedInstant)));
+        List<AppUser> expected = List.of(new AppUser("1", "123", "avatar_url" ,"username", 2 ,List.of("test1", "test2"),  fixedInstant, List.of()));
+        when(userRepository.findAll()).thenReturn(List.of(new AppUser("1", "123","avatar_url" , "username", 2 ,List.of("test1", "test2"),  fixedInstant, List.of())));
         //WHEN
         List<AppUser> actual = userService.getUsers();
         //THEN
@@ -46,7 +46,7 @@ class AppUserServiceTest {
     void getUserById_shouldReturnUser_whenUserExists() {
         //GIVEN
         Instant fixedInstant = Instant.parse("2024-06-20T10:15:30.00Z");
-        AppUser expected = new AppUser("1", "123", "avatar_url" ,"username", 2 ,List.of("test1", "test2"),  fixedInstant);
+        AppUser expected = new AppUser("1", "123", "avatar_url" ,"username", 2 ,List.of("test1", "test2"),  fixedInstant, List.of());
         when(userRepository.findById("1")).thenReturn(Optional.of(expected));
         //WHEN
         AppUser actual = userService.getUserById("1");
