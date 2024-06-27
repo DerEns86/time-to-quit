@@ -53,12 +53,12 @@ public class SecurityConfig {
         DefaultOAuth2UserService userService = new DefaultOAuth2UserService();
 
         return userRequest -> {
-            OAuth2User githubUser = userService.loadUser(userRequest);  // NOSONAR
+            OAuth2User githubUser = userService.loadUser(userRequest);
 
             try {
-                appUserService.getUserById(githubUser.getAttributes().get("id").toString());   // NOSONAR
-            } catch (NoSuchUserException exception) { // NOSONAR
-                appUserService.saveNewAppUser(githubUser); // NOSONAR
+                appUserService.getUserById(githubUser.getAttributes().get("id").toString());
+            } catch (NoSuchUserException exception) {
+                appUserService.saveNewAppUser(githubUser);
             }
 
             return githubUser;
