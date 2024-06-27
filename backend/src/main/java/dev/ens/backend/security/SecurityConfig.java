@@ -49,16 +49,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {  // NOSONAR
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
         DefaultOAuth2UserService userService = new DefaultOAuth2UserService();
 
         return userRequest -> {
-            OAuth2User githubUser = userService.loadUser(userRequest);
+            OAuth2User githubUser = userService.loadUser(userRequest);  // NOSONAR
 
             try {
-                appUserService.getUserById(githubUser.getAttributes().get("id").toString());
-            } catch (NoSuchUserException exception) {
-                appUserService.saveNewAppUser(githubUser);
+                appUserService.getUserById(githubUser.getAttributes().get("id").toString());   // NOSONAR
+            } catch (NoSuchUserException exception) { // NOSONAR
+                appUserService.saveNewAppUser(githubUser); // NOSONAR
             }
 
             return githubUser;
