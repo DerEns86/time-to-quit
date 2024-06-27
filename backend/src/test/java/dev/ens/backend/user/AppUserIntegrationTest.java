@@ -37,7 +37,7 @@ class AppUserIntegrationTest {
     @DirtiesContext
     void getUsers_shouldReturnListOfUsers_whenUsersPresent() throws Exception {
         Instant fixedInstant = Instant.parse("2024-06-20T10:15:30.00Z");
-        AppUser appUser = new AppUser("1", "123" , "avatar_url" ,"123", 2, List.of("test1", "test2"), fixedInstant);
+        AppUser appUser = new AppUser("1", "123" , "avatar_url" ,"123", 2, List.of("test1", "test2"), fixedInstant, List.of());
         userRepository.save(appUser);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users"))
@@ -59,7 +59,7 @@ class AppUserIntegrationTest {
     @DirtiesContext
     void getUserById_shouldReturnUser_whenUserExist() throws Exception {
         Instant fixedInstant = Instant.parse("2024-06-20T10:15:30.00Z");
-        AppUser appUser = new AppUser("1", "123",  "avatar_url" ,"123",2 ,List.of("test1", "test2"),  fixedInstant);
+        AppUser appUser = new AppUser("1", "123",  "avatar_url" ,"123",2 ,List.of("test1", "test2"),  fixedInstant, List.of());
         userRepository.save(appUser);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/" + appUser.id()))
@@ -72,7 +72,8 @@ class AppUserIntegrationTest {
         "username": "123",
         "dailySmokedCigarettes": 2,
         "mainMotivation": ["test1", "test2"],
-        "quitDate": "2024-06-20T10:15:30Z"
+        "quitDate": "2024-06-20T10:15:30Z",
+    "goals" : []
     }
     """));
     }

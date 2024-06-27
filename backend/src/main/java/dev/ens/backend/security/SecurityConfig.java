@@ -1,7 +1,7 @@
 package dev.ens.backend.security;
 
-import dev.ens.backend.model.AppUser;
-import dev.ens.backend.user.UserRepository;
+import dev.ens.backend.exceptions.NoSuchUserException;
+import dev.ens.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
-import java.util.Collections;
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,12 +26,8 @@ public class SecurityConfig {
     @Value("${app.url}")
     private String appUrl;
 
-    private final UserRepository userRepository;
+    private final UserService appUserService;
 
-    @Bean
-    public DefaultOAuth2UserService defaultOAuth2UserService() {
-        return new DefaultOAuth2UserService();
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -55,24 +49,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService(DefaultOAuth2UserService userService) {
-//        DefaultOAuth2UserService userService = new DefaultOAuth2UserService();
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+        DefaultOAuth2UserService userService = new DefaultOAuth2UserService();
 
         return userRequest -> {
-            OAuth2User githubUser = userService.loadUser(userRequest);
+            OAuth2User githubUser = userService.loadUser(userRequest);  // NOSONAR
 
-            AppUser user = userRepository.findById(githubUser.getAttributes().get("id").toString())
-                    .orElseGet(() -> {
-                        AppUser newUser = new AppUser(githubUser.getAttributes().get("id").toString(),
-                                githubUser.getName(),
-                                githubUser.getAttributes().get("avatar_url").toString(),
-                                githubUser.getAttributes().get("name").toString(),
-                                0,
-                                Collections.emptyList(),
-                                null);
-
-                        return userRepository.save(newUser);
-                    });
+            try {
+                appUserService.getUserById(githubUser.getAttributes().get("id").toString());   // NOSONAR
+            } catch (NoSuchUserException exception) { // NOSONAR
+                appUserService.saveNewAppUser(githubUser); // NOSONAR
+            }
 
             return githubUser;
         };

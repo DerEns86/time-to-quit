@@ -15,6 +15,7 @@ public record AppUser(
         String username,
         int dailySmokedCigarettes,
         List<String> mainMotivation,
-        Instant quitDate
+        Instant quitDate,
+        List<Goal> goals
 ) {
 }
