@@ -25,10 +25,13 @@ public class UserService {
     }
 
     public AppUser saveNewAppUser(OAuth2User oAuth2User){
-        AppUser newUser = new AppUser(oAuth2User.getAttributes().get("id").toString(),
+        String id = oAuth2User.getAttributes().get("id") != null ? oAuth2User.getAttributes().get("id").toString() : null;
+        String avatar_url = oAuth2User.getAttributes().get("avatar_url") != null ? oAuth2User.getAttributes().get("avatar_url").toString() : null;
+        String username = oAuth2User.getAttributes().get("name") != null ? oAuth2User.getAttributes().get("name").toString() : null;
+        AppUser newUser = new AppUser(id,
                 oAuth2User.getName(),
-                oAuth2User.getAttributes().get("avatar_url").toString(),
-                oAuth2User.getAttributes().get("name").toString(),
+                avatar_url,
+                username,
                 0,
                 Collections.emptyList(),
                 null,
