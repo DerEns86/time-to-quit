@@ -2,7 +2,6 @@ package dev.ens.backend.security;
 
 import dev.ens.backend.exceptions.NoSuchUserException;
 import dev.ens.backend.user.UserService;
-import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -50,8 +49,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Generated
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {  // NOSONAR
         DefaultOAuth2UserService userService = new DefaultOAuth2UserService();
 
         return userRequest -> {
