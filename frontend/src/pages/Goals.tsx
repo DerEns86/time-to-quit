@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import {githubUser} from "../model/userModel.ts";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import {Goal} from "../model/goal.ts";
+import {Goal, GoalDTO} from "../model/goal.ts";
+import { addGoal } from "../service/userService.ts";
+import {useNavigate} from "react-router-dom";
 
 type GoalsProps = {
     user: githubUser | null | undefined;
@@ -12,6 +14,7 @@ export default function Goals(props: Readonly<GoalsProps>){
     const [goalName, setGoalName] = useState("");
     const [goalPrice, setGoalPrice] = useState(0);
     const [goals, setGoals] = useState<Goal[]>(props.user?.goals || []);
+    const navigate = useNavigate();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -25,16 +28,22 @@ export default function Goals(props: Readonly<GoalsProps>){
         event.preventDefault();
         console.log("Goal Name: ", goalName);
         console.log("Goal Price: ", goalPrice);
-        const newGoal: Goal = {
-            goalId: Math.random().toString(),
+        const newGoal: GoalDTO = {
             goalName: goalName,
-            goalPrice: goalPrice,
-            createAt: new Date().toISOString(),
-            isCompleted: false
+            goalPrice: goalPrice
         };
-        setGoals(prevGoals => [...prevGoals, newGoal]); // add the new goal to the goals array
-        console.log(props.user?.goals);
-        console.log(goals)
+        if (props.user) {
+            addGoal(newGoal, props.user.id)
+                .then(response => {
+                    const addedGoal = response.data;
+                    setGoals(prevGoals => [...prevGoals, addedGoal]);
+                    console.log(props.user?.goals);
+                    console.log(goals)
+                })
+                .catch(error => {
+                    console.error("Error adding goal: ", error);
+                });
+        }
         handleClose();
     };
 
@@ -42,7 +51,7 @@ export default function Goals(props: Readonly<GoalsProps>){
     return (
         <section>
             <h3>Goals</h3>
-            {props.user?.quitDate === null ? <Button>Navigate</Button> :
+            {props.user?.quitDate === null ? <Button onClick={()=> navigate("/")}>Navigate</Button> :
                 <div >
             {props.user?.goals.map((goal) => (
                 <div key={goal.goalId}>
