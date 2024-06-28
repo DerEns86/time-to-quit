@@ -2,6 +2,7 @@ package dev.ens.backend.user;
 
 import dev.ens.backend.exceptions.NoSuchUserException;
 import dev.ens.backend.model.AppUser;
+import dev.ens.backend.model.AppUserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -40,5 +41,22 @@ public class UserService {
 
         return userRepository.save(newUser);
     }
+
+    public AppUser updateUser(String id, AppUserDTO updatedUser) {
+        AppUser user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchUserException("No user found with id: " + id));
+
+        AppUser appUserToUpdate = new AppUser(user.id(),
+                user.githubId(),
+                user.avatar_url(),
+                user.username(),
+                updatedUser.dailySmokedCigarettes(),
+                updatedUser.mainMotivation(),
+                updatedUser.quitDate(),
+                updatedUser.goals()
+        );
+        return userRepository.save(appUserToUpdate);
+    }
+
 
 }
