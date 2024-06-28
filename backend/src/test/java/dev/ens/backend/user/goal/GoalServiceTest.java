@@ -5,7 +5,6 @@ import dev.ens.backend.model.AppUser;
 import dev.ens.backend.model.Goal;
 import dev.ens.backend.model.GoalDTO;
 import dev.ens.backend.user.UserRepository;
-import dev.ens.backend.user.UserService;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
