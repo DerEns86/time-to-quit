@@ -29,7 +29,7 @@ export default function Goals(props: Readonly<GoalsProps>){
            <Button onClick={()=> navigate("/")}>Navigate</Button>
 
             {props.user?.goals.map((goal) => (
-                <GoalSingleItem goal={goal} key={goal.goalId}/>
+                <GoalSingleItem goal={goal} user={props.user} key={goal.goalId}/>
             ))}
 
 
