@@ -21,7 +21,6 @@ class AppUserServiceTest {
 
     UserRepository userRepository = mock(UserRepository.class);
     IdService idService = mock(IdService.class);
-    UserService userService = new UserService(userRepository);
     GoalService goalService = new GoalService(userRepository, idService);
 
     @Test
