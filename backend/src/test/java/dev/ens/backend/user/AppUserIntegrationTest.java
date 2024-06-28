@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -37,45 +38,45 @@ class AppUserIntegrationTest {
     @DirtiesContext
     void getUsers_shouldReturnListOfUsers_whenUsersPresent() throws Exception {
         Instant fixedInstant = Instant.parse("2024-06-20T10:15:30.00Z");
-        AppUser appUser = new AppUser("1", "123" , "avatar_url" ,"123", 2, List.of("test1", "test2"), fixedInstant, List.of());
+        AppUser appUser = new AppUser("1", "123", "avatar_url", "123", 2, List.of("test1", "test2"), fixedInstant, List.of());
         userRepository.save(appUser);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-    [{
-        "id": "1",
-        "githubId": "123",
-        "avatar_url": "avatar_url",
-        "username": "123",
-        "dailySmokedCigarettes": 2,
-        "mainMotivation": ["test1", "test2"],
-        "quitDate": "2024-06-20T10:15:30Z"
-                            }]
-    """));
+                        [{
+                            "id": "1",
+                            "githubId": "123",
+                            "avatar_url": "avatar_url",
+                            "username": "123",
+                            "dailySmokedCigarettes": 2,
+                            "mainMotivation": ["test1", "test2"],
+                            "quitDate": "2024-06-20T10:15:30Z"
+                                                }]
+                        """));
     }
 
     @Test
     @DirtiesContext
     void getUserById_shouldReturnUser_whenUserExist() throws Exception {
         Instant fixedInstant = Instant.parse("2024-06-20T10:15:30.00Z");
-        AppUser appUser = new AppUser("1", "123",  "avatar_url" ,"123",2 ,List.of("test1", "test2"),  fixedInstant, List.of());
+        AppUser appUser = new AppUser("1", "123", "avatar_url", "123", 2, List.of("test1", "test2"), fixedInstant, List.of());
         userRepository.save(appUser);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/" + appUser.id()))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-    {
-        "id": "1",
-        "githubId": "123",
-        "avatar_url": "avatar_url",
-        "username": "123",
-        "dailySmokedCigarettes": 2,
-        "mainMotivation": ["test1", "test2"],
-        "quitDate": "2024-06-20T10:15:30Z",
-    "goals" : []
-    }
-    """));
+                        {
+                            "id": "1",
+                            "githubId": "123",
+                            "avatar_url": "avatar_url",
+                            "username": "123",
+                            "dailySmokedCigarettes": 2,
+                            "mainMotivation": ["test1", "test2"],
+                            "quitDate": "2024-06-20T10:15:30Z",
+                        "goals" : []
+                        }
+                        """));
     }
 
     @Test
@@ -83,5 +84,35 @@ class AppUserIntegrationTest {
     void getUserById_shouldReturnNotFound_whenInvalidIdProvided() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/1"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DirtiesContext
+    void updateUser_shouldReturnUpdatedUser_whenCalledWithValidIdAndAppUserDTO() throws Exception {
+        // Given
+        Instant fixedInstant = Instant.parse("2024-06-20T10:15:30Z");
+        AppUser existingUser = new AppUser("1", "123", "avatar_url", "username", 2, List.of("test1", "test2"), fixedInstant, List.of());
+        userRepository.save(existingUser);
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/users/" + existingUser.id())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "dailySmokedCigarettes": 5,
+                                    "mainMotivation": ["test3", "test4"],
+                                    "quitDate": "2024-06-20T10:15:30Z",
+                                    "goals": []
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                            "dailySmokedCigarettes": 5,
+                            "mainMotivation": ["test3", "test4"],
+                            "quitDate": "2024-06-20T10:15:30Z",
+                            "goals": []
+                        }
+                        """));
     }
 }
