@@ -1,6 +1,5 @@
 package dev.ens.backend.model;
 
-import lombok.Builder;
 import lombok.With;
 
 import java.time.Instant;
