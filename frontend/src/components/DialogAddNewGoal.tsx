@@ -37,6 +37,8 @@ export default function DialogAddNewGoal(props: Readonly<Dialog_AddNewGoalProps>
                     console.error("Error adding goal: ", error);
                 });
         }
+        setGoalName("");
+        setGoalPrice(0);
         props.handleClose();
     };
 

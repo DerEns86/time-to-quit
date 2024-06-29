@@ -8,7 +8,8 @@ import Home from "./pages/Home.tsx";
 import Header from "./components/shared/Header.tsx";
 import Goals from "./pages/Goals.tsx";
 import {Goal} from "./model/goal.ts";
-import {loadGoals} from "./service/userService.ts";
+import {loadGoals, deleteGoal} from "./service/userService";
+
 
 
 function App() {
@@ -20,6 +21,14 @@ function App() {
         setGoals(prevGoals => [...prevGoals, newGoal]);
     };
 
+    const deleteSingleGoal =  async (goalId: string) => {
+        if (user?.id) {
+            await deleteGoal(user.id, goalId);
+            const updatedGoals = goals.filter(goal => goal.goalId !== goalId);
+            setGoals(updatedGoals);
+        }
+    }
+
     useEffect(() => {
         loadUser().then(user => {
             setUser(user);
@@ -27,7 +36,6 @@ function App() {
             if (user) {
                 loadGoals(user.id).then(response => {
                     setGoals(response.data);
-                    console.log(goals);
                 });
             } else {
                 navigate("/login");
@@ -45,7 +53,7 @@ return (
 
             <Route element={<ProtectedRoute user={user}/>}>
                 <Route path="/" element={<Home user={user} goals={goals}/>}/>
-                <Route path="/goals" element={<Goals user={user} goals={goals} addGoal={addGoal}/>}/>
+                <Route path="/goals" element={<Goals user={user} goals={goals} addGoal={addGoal} deleteGoal={deleteSingleGoal}/>}/>
             </Route>
         </Routes>
     </>

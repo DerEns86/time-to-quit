@@ -10,6 +10,7 @@ type GoalsProps = {
     user: githubUser | null | undefined;
     goals: Goal[];
     addGoal: (newGoal: Goal) => void;
+    deleteGoal: (goalId: string) => void;
 }
 
 export default function Goals(props: Readonly<GoalsProps>){
@@ -32,7 +33,7 @@ export default function Goals(props: Readonly<GoalsProps>){
            <Button onClick={()=> navigate("/")}>Navigate</Button>
 
             {props.goals.map((goal) => (
-                <GoalSingleItem goal={goal} user={props.user} key={goal.goalId}/>
+                <GoalSingleItem goal={goal} user={props.user} key={goal.goalId} deleteGoal={props.deleteGoal}/>
             ))}
 
 
