@@ -16,8 +16,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GoalService {
     private final GoalRepository goalRepository;
+    private final UserRepository userRepository;
 
     public Goal addGoal(String userId, Goal goal) {
+       userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchUserException("No user found with id: " + userId));
+
         Goal newGoal = new Goal(
                 null,
                 goal.goalName(),
@@ -28,7 +32,10 @@ public class GoalService {
         return goalRepository.save(newGoal);
     }
 
-    public Goal updateGoal(String goalId, GoalDTO goalDTO){
+    public Goal updateGoal(String userId, String goalId, GoalDTO goalDTO){
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchUserException("No user found with id: " + userId));
+
         Goal goalToUpdate = goalRepository.findById(goalId)
                 .orElseThrow(() -> new NoSuchUserException("No goal found with id: " + goalId));
 
@@ -45,5 +52,15 @@ public class GoalService {
 
     public List<Goal> getGoals(String userId) {
         return goalRepository.findByAppUserId(userId);
+    }
+
+    public void deleteGoal(String userId, String goalId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchUserException("No user found with id: " + userId));
+
+        Goal goalToDelete = goalRepository.findById(goalId)
+                .orElseThrow(() -> new NoSuchUserException("No goal found with id: " + goalId));
+
+        goalRepository.delete(goalToDelete);
     }
 }

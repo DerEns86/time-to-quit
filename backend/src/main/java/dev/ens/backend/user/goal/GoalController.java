@@ -27,6 +27,11 @@ public class GoalController {
 
     @PutMapping("/{userId}/{goalId}")
     public Goal updateGoal(@PathVariable String userId, @PathVariable String goalId, @RequestBody GoalDTO goalDTO) {
-        return goalService.updateGoal( goalId, goalDTO);
+        return goalService.updateGoal(userId, goalId, goalDTO);
+    }
+
+    @DeleteMapping("/{userId}/{goalId}")
+    public void deleteGoal(@PathVariable String userId, @PathVariable String goalId) {
+        goalService.deleteGoal(userId, goalId);
     }
 }
