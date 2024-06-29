@@ -9,50 +9,41 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class GoalService {
-    private final UserRepository userRepository;
-    private final IdService idService;
+    private final GoalRepository goalRepository;
 
-    public AppUser addGoal(String userId, Goal goal) {
-        AppUser user = userRepository.findById(userId).orElseThrow();
-        String newGoalId = idService.generateId();
-
+    public Goal addGoal(String userId, Goal goal) {
         Goal newGoal = new Goal(
-                newGoalId,
+                null,
                 goal.goalName(),
                 goal.goalPrice(),
-                Instant.now(),
-                false
+                false,
+                userId
         );
-        user.goals().add(newGoal);
-        return userRepository.save(user);
+        return goalRepository.save(newGoal);
     }
 
-    public AppUser updateGoal(String userId, String goalId, GoalDTO goalDTO){
-        AppUser user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchUserException("No user found with id: " + userId));
+    public Goal updateGoal(String goalId, GoalDTO goalDTO){
+        Goal goalToUpdate = goalRepository.findById(goalId)
+                .orElseThrow(() -> new NoSuchUserException("No goal found with id: " + goalId));
 
-        Optional<Goal> goalToUpdate = user.goals().stream()
-                .filter(goal -> goal.goalId().equals(goalId))
-                .findFirst();
+        Goal updatedGoal = new Goal(
+                goalToUpdate.goalId(),
+                goalDTO.goalName(),
+                goalDTO.goalPrice(),
+                goalToUpdate.isCompleted(),
+                goalToUpdate.appUserId()
+        );
 
-        if(goalToUpdate.isPresent()){
-            Goal updatedGoal = new Goal(
-                    goalToUpdate.get().goalId(),
-                    goalDTO.goalName(),
-                    goalDTO.goalPrice(),
-                    goalToUpdate.get().createAt(),
-                    goalToUpdate.get().isCompleted()
-            );
-            user.goals().removeIf(goal -> goal.goalId().equals(goalId));
-            user.goals().add(updatedGoal);
-            return userRepository.save(user);
-        } else {
-            throw new NoSuchUserException("No goal found with id: " + goalId);
-        }
+        return goalRepository.save(updatedGoal);
+    }
+
+    public List<Goal> getGoals(String userId) {
+        return goalRepository.findByAppUserId(userId);
     }
 }

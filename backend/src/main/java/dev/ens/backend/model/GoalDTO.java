@@ -8,7 +8,7 @@ import java.time.Instant;
 public record GoalDTO(
         String goalName,
         int goalPrice,
-        Instant createAt,
-        boolean isCompleted
+        boolean isCompleted,
+        String appUserId
  ) {
 }
