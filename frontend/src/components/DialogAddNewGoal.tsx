@@ -8,6 +8,7 @@ type Dialog_AddNewGoalProps = {
     user: githubUser | null | undefined;
     open: boolean;
     handleClose: () => void;
+    addGoal: (newGoal: Goal) => void;
 }
 
 export default function DialogAddNewGoal(props: Readonly<Dialog_AddNewGoalProps>){
@@ -28,6 +29,7 @@ export default function DialogAddNewGoal(props: Readonly<Dialog_AddNewGoalProps>
                 .then(response => {
                     const addedGoal = response.data;
                     setGoals(prevGoals => [...prevGoals, addedGoal]);
+                    props.addGoal(addedGoal);
                     console.log(props.user?.goals);
                     console.log(goals)
                 })
