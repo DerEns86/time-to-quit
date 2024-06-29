@@ -21,7 +21,7 @@ class GoalServiceTest {
     UserRepository userRepository = mock(UserRepository.class);
     GoalService goalService = new GoalService(goalRepository, userRepository);
 
-    private AppUser testAppUser = new AppUser("1", "123", "avatar_url" ,"username", 2 , List.of("test1", "test2"), Instant.parse("2024-06-20T10:15:30.00Z") , List.of());
+    private final AppUser testAppUser = new AppUser("1", "123", "avatar_url" ,"username", 2 , List.of("test1", "test2"), Instant.parse("2024-06-20T10:15:30.00Z") , List.of());
 
     @Test
     void addGoal_shouldReturnUserWithNewGoal_whenCalledWithValidUserIdAndGoal() {
