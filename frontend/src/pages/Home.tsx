@@ -4,13 +4,17 @@ import "./../main.css"
 import "./../css/home.css"
 import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import {Goal} from "../model/goal.ts";
 
 type HomeProps = {
     user: githubUser | null | undefined;
+    goals: Goal[];
 }
 
 export default function Home(props: Readonly<HomeProps>) {
     const navigate = useNavigate();
+
+
 
     console.log('User data in Home:', props.user);
     return (
@@ -42,12 +46,11 @@ export default function Home(props: Readonly<HomeProps>) {
                 }}>{props.user?.avatar_url}</p>
 
                 <h3>Goals</h3>
-                {props.user?.goals.map((goal) => (
+                {props.goals.map((goal) => (
                     <div key={goal.goalId}>
                         <p>Goal ID: {goal.goalId}</p>
                         <p>Goal Name: {goal.goalName}</p>
                         <p>Goal Price: {goal.goalPrice}</p>
-                        <p>Created At: {goal.createAt}</p>
                         <p>Is Completed: {goal.isCompleted ? 'Yes' : 'No'}</p>
                     </div>
                 ))}

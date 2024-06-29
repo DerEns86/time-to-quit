@@ -9,14 +9,16 @@ import {useState} from "react";
 type GoalSingleItemProps = {
     goal: Goal;
     user: githubUser | null | undefined;
+    deleteGoal: (goalId: string) => void;
 }
 
-export default function GoalSingleItem({goal, user}: Readonly<GoalSingleItemProps>) {
+export default function GoalSingleItem({goal, user, deleteGoal}: Readonly<GoalSingleItemProps>) {
     const [editOpen, setEditOpen] = useState(false);
 
     const handleEditClose = () => {
         setEditOpen(false);
     };
+
     console.log("GoalSingleItem user:", user);
 
     return (
@@ -49,7 +51,7 @@ export default function GoalSingleItem({goal, user}: Readonly<GoalSingleItemProp
                     <IconButton onClick={() => setEditOpen(true)}>
                         <ModeEditOutlineOutlinedIcon color="primary" fontSize="small"/>
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={() => deleteGoal(goal.goalId)}>
                         <DeleteOutlineOutlinedIcon color="error" fontSize="small"/>
                     </IconButton>
                 </CardActions>

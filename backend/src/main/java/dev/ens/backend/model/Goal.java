@@ -1,15 +1,15 @@
 package dev.ens.backend.model;
 
 import lombok.With;
-
-import java.time.Instant;
+import org.springframework.data.annotation.Id;
 
 @With
 public record Goal(
+        @Id
         String goalId,
         String goalName,
         int goalPrice,
-        Instant createAt,
-        boolean isCompleted
+        boolean isCompleted,
+        String appUserId
 ) {
 }

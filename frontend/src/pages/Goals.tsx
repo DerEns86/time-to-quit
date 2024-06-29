@@ -4,9 +4,13 @@ import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import DialogAddNewGoal from "../components/DialogAddNewGoal.tsx";
 import GoalSingleItem from "../components/GoalSingleItem.tsx";
+import {Goal} from "../model/goal.ts";
 
 type GoalsProps = {
     user: githubUser | null | undefined;
+    goals: Goal[];
+    addGoal: (newGoal: Goal) => void;
+    deleteGoal: (goalId: string) => void;
 }
 
 export default function Goals(props: Readonly<GoalsProps>){
@@ -28,13 +32,13 @@ export default function Goals(props: Readonly<GoalsProps>){
             <h3>Goals</h3>
            <Button onClick={()=> navigate("/")}>Navigate</Button>
 
-            {props.user?.goals.map((goal) => (
-                <GoalSingleItem goal={goal} user={props.user} key={goal.goalId}/>
+            {props.goals.map((goal) => (
+                <GoalSingleItem goal={goal} user={props.user} key={goal.goalId} deleteGoal={props.deleteGoal}/>
             ))}
 
 
             <Button variant={"outlined"} onClick={handleClickOpen}>Add new goal</Button>
-            <DialogAddNewGoal user={props.user} open={open} handleClose={handleClose}/>
+            <DialogAddNewGoal user={props.user} open={open} handleClose={handleClose} addGoal={props.addGoal}/>
         </section>
     )
 }
