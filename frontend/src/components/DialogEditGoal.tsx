@@ -15,13 +15,12 @@ export default function DialogEditGoal({ user, goal, open, handleClose }: Readon
     const [goalName, setGoalName] = useState(goal.goalName);
     const [goalPrice, setGoalPrice] = useState(goal.goalPrice);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         // Update the goal
         goal.goalName = goalName;
         goal.goalPrice = goalPrice;
         console.log("fetched user:", user?.id);
 
-        // Update the user's goal
         if (user) {
             const goalIndex = user.goals.findIndex(g => g.goalId === goal.goalId);
             if (goalIndex !== -1) {
@@ -29,14 +28,14 @@ export default function DialogEditGoal({ user, goal, open, handleClose }: Readon
             } else {
                 user.goals.push(goal);
             }
-
-            // Save the changes
-            updateGoal(goal, user.id, goal.goalId).then(response => {
-                console.log("Goal updated: ", response.data);
-                updateUser(user, user.id).then(response => {
-                    console.log("User updated: ", response.data);
-                });
-            });
+            try {
+                const goalResponse = await updateGoal(goal, user.id, goal.goalId);
+                console.log("Goal updated: ", goalResponse.data);
+                const userResponse = await updateUser(user, user.id);
+                console.log("User updated: ", userResponse.data);
+            } catch (error) {
+                console.error("Error updating goal or user: ", error);
+            }
         }
 
         handleClose();
