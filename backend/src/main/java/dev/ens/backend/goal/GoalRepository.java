@@ -1,4 +1,4 @@
-package dev.ens.backend.user.goal;
+package dev.ens.backend.goal;
 
 import dev.ens.backend.model.Goal;
 import org.springframework.data.mongodb.repository.MongoRepository;

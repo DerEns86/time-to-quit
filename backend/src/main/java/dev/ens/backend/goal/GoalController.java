@@ -1,6 +1,5 @@
-package dev.ens.backend.user.goal;
+package dev.ens.backend.goal;
 
-import dev.ens.backend.model.AppUser;
 import dev.ens.backend.model.Goal;
 import dev.ens.backend.model.GoalDTO;
 import lombok.RequiredArgsConstructor;
