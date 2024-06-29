@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.Instant;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,6 +45,35 @@ class GoalIntegrationTest {
                 Instant.parse("2024-06-20T10:15:30.00Z"),
                 List.of());
         userRepository.save(testAppUser);
+    }
+
+    @Test
+    void getGoals_shouldReturnListOfGoals_whenCalledWithValidUserId() throws Exception {
+        Goal goal1 = new Goal("goalId1", "goal1", 100, false, "1");
+        Goal goal2 = new Goal("goalId2", "goal2", 200, false, "1");
+        goalRepository.saveAll(List.of(goal1, goal2));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/1/goals")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                    [
+                        {
+                            "goalId": "goalId1",
+                            "goalName": "goal1",
+                            "goalPrice": 100,
+                            "isCompleted": false,
+                            "appUserId": "1"
+                        },
+                        {
+                            "goalId": "goalId2",
+                            "goalName": "goal2",
+                            "goalPrice": 200,
+                            "isCompleted": false,
+                            "appUserId": "1"
+                        }
+                    ]
+                    """));
     }
 
     @Test
@@ -100,5 +130,18 @@ class GoalIntegrationTest {
                             "appUserId": "1"
                         }
                         """));
+    }
+
+    @Test
+    @DirtiesContext
+    void deleteGoal_shouldDeleteGoal_whenCalledWithValidUserIdAndGoalId() throws Exception {
+        Goal goal = new Goal("goalId", "goal", 100, false, "1");
+        goalRepository.save(goal);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/1/" + goal.goalId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        assertFalse(goalRepository.findById("goalId").isPresent());
     }
 }

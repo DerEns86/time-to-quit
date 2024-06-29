@@ -17,13 +17,13 @@ public class GoalService {
     private final GoalRepository goalRepository;
     private final UserRepository userRepository;
 
-    private AppUser findTestUserById(String userId) {
+    private AppUser findUserById(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchUserException("No user found with id: " + userId));
     }
 
     public Goal addGoal(String userId, Goal goal) {
-       findTestUserById(userId);
+       findUserById(userId);
 
         Goal newGoal = new Goal(
                 null,
@@ -36,7 +36,7 @@ public class GoalService {
     }
 
     public Goal updateGoal(String userId, String goalId, GoalDTO goalDTO){
-        findTestUserById(userId);
+        findUserById(userId);
 
         Goal goalToUpdate = goalRepository.findById(goalId)
                 .orElseThrow(() -> new NoSuchGoalException("No goal found with id: " + goalId));
@@ -57,7 +57,7 @@ public class GoalService {
     }
 
     public void deleteGoal(String userId, String goalId) {
-        findTestUserById(userId);
+        findUserById(userId);
 
         Goal goalToDelete = goalRepository.findById(goalId)
                 .orElseThrow(() -> new NoSuchUserException("No goal found with id: " + goalId));

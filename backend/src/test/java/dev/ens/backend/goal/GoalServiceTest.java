@@ -1,6 +1,7 @@
 package dev.ens.backend.goal;
 
 import dev.ens.backend.exceptions.NoSuchGoalException;
+import dev.ens.backend.exceptions.NoSuchUserException;
 import dev.ens.backend.model.AppUser;
 import dev.ens.backend.model.Goal;
 import dev.ens.backend.model.GoalDTO;
@@ -8,6 +9,7 @@ import dev.ens.backend.user.UserRepository;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,26 @@ class GoalServiceTest {
     GoalService goalService = new GoalService(goalRepository, userRepository);
 
     private final AppUser testAppUser = new AppUser("1", "123", "avatar_url" ,"username", 2 , List.of("test1", "test2"), Instant.parse("2024-06-20T10:15:30.00Z") , List.of());
+
+
+    @Test
+    void getGoals_shouldReturnListOfGoals_whenCalledWithValidUserId() {
+        // GIVEN
+        List<Goal> expectedGoals = Arrays.asList(
+                new Goal("1", "goal1", 100, false, "1"),
+                new Goal("2", "goal2", 200, false, "1")
+        );
+
+        when(userRepository.findById("1")).thenReturn(Optional.of(testAppUser));
+        when(goalRepository.findByAppUserId("1")).thenReturn(expectedGoals);
+
+        // WHEN
+        List<Goal> actualGoals = goalService.getGoals("1");
+
+        // THEN
+        assertEquals(expectedGoals, actualGoals);
+        verify(goalRepository).findByAppUserId("1");
+    }
 
     @Test
     void addGoal_shouldReturnUserWithNewGoal_whenCalledWithValidUserIdAndGoal() {
@@ -103,5 +125,47 @@ class GoalServiceTest {
         // THEN
         assertEquals("No goal found with id: goalId", exception.getMessage());
         verify(goalRepository).findById("goalId");
+    }
+
+    @Test
+    void deleteGoal_shouldDeleteGoal_whenCalledWithValidUserIdAndGoalId() {
+        // GIVEN
+        Goal goalToDelete = new Goal("1", "goal1", 100, false, "1");
+
+        when(userRepository.findById("1")).thenReturn(Optional.of(testAppUser));
+        when(goalRepository.findById("1")).thenReturn(Optional.of(goalToDelete));
+
+        // WHEN
+        goalService.deleteGoal("1", "1");
+
+        // THEN
+        verify(goalRepository).delete(goalToDelete);
+    }
+
+    @Test
+    void deleteGoal_shouldThrowNoSuchUserException_whenUserDoesNotExist() {
+        // GIVEN
+        when(userRepository.findById("1")).thenReturn(Optional.empty());
+
+        // WHEN
+        Exception exception = assertThrows(NoSuchUserException.class, () -> goalService.deleteGoal("1", "1"));
+
+        // THEN
+        assertEquals("No user found with id: 1", exception.getMessage());
+        verify(userRepository).findById("1");
+    }
+
+    @Test
+    void deleteGoal_shouldThrowNoSuchUserException_whenGoalDoesNotExist() {
+        // GIVEN
+        when(userRepository.findById("1")).thenReturn(Optional.of(testAppUser));
+        when(goalRepository.findById("1")).thenReturn(Optional.empty());
+
+        // WHEN
+        Exception exception = assertThrows(NoSuchUserException.class, () -> goalService.deleteGoal("1", "1"));
+
+        // THEN
+        assertEquals("No goal found with id: 1", exception.getMessage());
+        verify(goalRepository).findById("1");
     }
 }
