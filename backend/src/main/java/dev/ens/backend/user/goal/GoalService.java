@@ -1,5 +1,6 @@
 package dev.ens.backend.user.goal;
 
+import dev.ens.backend.exceptions.NoSuchGoalException;
 import dev.ens.backend.exceptions.NoSuchUserException;
 import dev.ens.backend.model.AppUser;
 import dev.ens.backend.model.Goal;
@@ -37,7 +38,7 @@ public class GoalService {
                 .orElseThrow(() -> new NoSuchUserException("No user found with id: " + userId));
 
         Goal goalToUpdate = goalRepository.findById(goalId)
-                .orElseThrow(() -> new NoSuchUserException("No goal found with id: " + goalId));
+                .orElseThrow(() -> new NoSuchGoalException("No goal found with id: " + goalId));
 
         Goal updatedGoal = new Goal(
                 goalToUpdate.goalId(),
