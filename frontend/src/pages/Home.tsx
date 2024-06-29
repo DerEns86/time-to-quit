@@ -3,18 +3,21 @@ import { getNotSmokedCigarettes, savedMoney } from "../utilities/cigaretteUtilit
 import "./../main.css"
 import "./../css/home.css"
 import {Button} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 type HomeProps = {
     user: githubUser | null | undefined;
 }
 
 export default function Home(props: Readonly<HomeProps>) {
+    const navigate = useNavigate();
+
     console.log('User data in Home:', props.user);
     return (
         <section>
             <h1>Home</h1>
             <div>
-                {props.user?.quitDate === null ? <Button>Navigate</Button> :
+                {props.user?.quitDate === null ? <Button onClick={() => navigate("/goals")}>Navigate</Button> :
                 <div >
                     {getNotSmokedCigarettes(props.user) > 0 &&
                         <div>

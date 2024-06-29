@@ -2,6 +2,7 @@ package dev.ens.backend.user;
 
 import dev.ens.backend.exceptions.NoSuchUserException;
 import dev.ens.backend.model.AppUser;
+import dev.ens.backend.model.AppUserDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -85,6 +86,35 @@ class AppUserServiceTest {
         //THEN
         assertEquals(expected, actual);
         verify(userRepository).save(any(AppUser.class));
+    }
+
+    @Test
+    void updateUser_shouldReturnUpdatedUser_whenCalledWithIdAndAppUserDTO() {
+        //GIVEN
+        Instant fixedInstant = Instant.parse("2024-06-20T10:15:30.00Z");
+        AppUser user = new AppUser("1", "123", "avatar_url" ,"username", 2 ,List.of("test1", "test2"),  fixedInstant, List.of());
+        AppUserDTO updatedUser = new AppUserDTO(5, List.of("test3", "test4"), Instant.parse("2024-06-20T10:15:30.00Z"), List.of());
+        AppUser expected = new AppUser("1", "123", "avatar_url" ,"username", 5 ,List.of("test3", "test4"),  Instant.parse("2024-06-20T10:15:30.00Z"), List.of());
+        when(userRepository.findById("1")).thenReturn(Optional.of(user));
+        when(userRepository.save(any(AppUser.class))).thenReturn(expected);
+        //WHEN
+        AppUser actual = userService.updateUser("1", updatedUser);
+        //THEN
+        assertEquals(expected, actual);
+        verify(userRepository).findById("1");
+        verify(userRepository).save(any(AppUser.class));
+    }
+
+    @Test
+    void updateUser_shouldThrowNoSuchUserException_whenUserDoesNotExist() {
+        //GIVEN
+        AppUserDTO updatedUser = new AppUserDTO(5, List.of("test3", "test4"), Instant.parse("2024-06-20T10:15:30.00Z"), List.of());
+        when(userRepository.findById("1")).thenReturn(Optional.empty());
+        //WHEN
+        Exception exception = assertThrows(NoSuchUserException.class, () -> userService.updateUser("1", updatedUser));
+        //THEN
+        assertEquals("No user found with id: 1", exception.getMessage());
+        verify(userRepository).findById("1");
     }
 
 }

@@ -5,3 +5,8 @@ export type Goal = {
     createAt: string;
     isCompleted: boolean;
 }
+
+export type GoalDTO = {
+    goalName: string;
+    goalPrice: number;
+}

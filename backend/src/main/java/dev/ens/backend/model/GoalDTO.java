@@ -5,11 +5,10 @@ import lombok.With;
 import java.time.Instant;
 
 @With
-public record Goal(
-        String goalId,
+public record GoalDTO(
         String goalName,
         int goalPrice,
         Instant createAt,
         boolean isCompleted
-) {
+ ) {
 }

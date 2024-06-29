@@ -1,7 +1,9 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import {githubUser} from "../model/userModel.ts";
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import {Goal} from "../model/goal.ts";
+import {Button} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import DialogAddNewGoal from "../components/DialogAddNewGoal.tsx";
+import GoalSingleItem from "../components/GoalSingleItem.tsx";
 
 type GoalsProps = {
     user: githubUser | null | undefined;
@@ -9,9 +11,9 @@ type GoalsProps = {
 
 export default function Goals(props: Readonly<GoalsProps>){
     const [open, setOpen] = useState(false);
-    const [goalName, setGoalName] = useState("");
-    const [goalPrice, setGoalPrice] = useState(0);
-    const [goals, setGoals] = useState<Goal[]>(props.user?.goals || []);
+    // const [goals, setGoals] = useState<Goal[]>(props.user?.goals || []);
+    const navigate = useNavigate();
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -21,85 +23,18 @@ export default function Goals(props: Readonly<GoalsProps>){
         setOpen(false);
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        console.log("Goal Name: ", goalName);
-        console.log("Goal Price: ", goalPrice);
-        const newGoal: Goal = {
-            goalId: Math.random().toString(),
-            goalName: goalName,
-            goalPrice: goalPrice,
-            createAt: new Date().toISOString(),
-            isCompleted: false
-        };
-        setGoals(prevGoals => [...prevGoals, newGoal]); // add the new goal to the goals array
-        console.log(props.user?.goals);
-        console.log(goals)
-        handleClose();
-    };
-
-
     return (
         <section>
             <h3>Goals</h3>
-            {props.user?.quitDate === null ? <Button>Navigate</Button> :
-                <div >
+           <Button onClick={()=> navigate("/")}>Navigate</Button>
+
             {props.user?.goals.map((goal) => (
-                <div key={goal.goalId}>
-                    <p>Goal ID: {goal.goalId}</p>
-                    <p>Goal Name: {goal.goalName}</p>
-                    <p>Goal Price: {goal.goalPrice}</p>
-                    <p>Created At: {goal.createAt}</p>
-                    <p>Is Completed: {goal.isCompleted ? 'Yes' : 'No'}</p>
-                </div>
+                <GoalSingleItem goal={goal} user={props.user} key={goal.goalId}/>
             ))}
-                </div>}
+
 
             <Button variant={"outlined"} onClick={handleClickOpen}>Add new goal</Button>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                PaperProps={{
-                    component: 'form',
-                    onSubmit: handleSubmit,
-                }}
-            >
-                <DialogTitle>Neues Ziel</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Was möchtes du dir als nächstes kaufen?
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        required
-                        margin="dense"
-                        id="goalName"
-                        name="goalName"
-                        label="Goal Name"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={goalName}
-                        onChange={(event) => setGoalName(event.target.value)}
-                    />
-                    <TextField
-                        required
-                        margin="dense"
-                        id="goalPrice"
-                        name="goalPrice"
-                        label="Goal Price"
-                        type="number"
-                        fullWidth
-                        variant="standard"
-                        value={goalPrice}
-                        onChange={(event) => setGoalPrice(Number(event.target.value))}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Abbrechen</Button>
-                    <Button type="submit">Speichern</Button>
-                </DialogActions>
-            </Dialog>
+            <DialogAddNewGoal user={props.user} open={open} handleClose={handleClose}/>
         </section>
     )
 }
