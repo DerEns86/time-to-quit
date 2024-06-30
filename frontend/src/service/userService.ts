@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import { GoalDTO } from "../model/goal.ts";
-import {githubUser} from "../model/userModel.ts";
+import { UserDTO } from "../model/userModel.ts";
 
 
 export function loadGoals(userId: string) {
@@ -20,6 +20,6 @@ export function updateGoal(goal: GoalDTO, userId: string, goalId: string) {
     return axios.put(`api/users/${userId}/${goalId}`, goal);
 }
 
-export function updateUser(user: githubUser, userId: string) {
+export function updateUser(user: UserDTO, userId: string) {
     return axios.put(`api/users/${userId}`, user);
 }

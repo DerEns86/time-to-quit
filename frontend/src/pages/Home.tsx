@@ -2,9 +2,10 @@ import {githubUser} from "../model/userModel.ts";
 import { getNotSmokedCigarettes, savedMoney } from "../utilities/cigaretteUtilities.ts"
 import "./../main.css"
 import "./../css/home.css"
-import {Button} from "@mui/material";
+import {Box, Button, Paper} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {Goal} from "../model/goal.ts";
+import SmokeFreeTracker from "../components/SmokeFreeTracker.tsx";
 
 type HomeProps = {
     user: githubUser | null | undefined;
@@ -19,22 +20,12 @@ export default function Home(props: Readonly<HomeProps>) {
     console.log('User data in Home:', props.user);
     return (
         <section>
-            <h1>Home</h1>
+            <h1>Willkommen <br/>{props.user?.username}</h1>
             <div>
-                {props.user?.quitDate === null ? <Button onClick={() => navigate("/goals")}>Navigate</Button> :
-                <div >
-                    {getNotSmokedCigarettes(props.user) > 0 &&
-                        <div>
-                            You have not smoked {getNotSmokedCigarettes(props.user)} cigarettes
-                        </div>
-                    }
-                    {savedMoney(props.user) > 0 &&
-                        <div>You have
-                            saved {savedMoney(props.user).toFixed(2)} EUR</div>}
-                </div>
-                }
-                <p>Welcome {props.user?.username}</p>
-                <p>Welcome {props.user?.id}</p>
+                <SmokeFreeTracker user={props.user}/>
+
+
+
                 <p>{props.user?.dailySmokedCigarettes}</p>
                 <p>{props.user?.mainMotivation[0]}</p>
                 <p>{props.user?.mainMotivation[1]}</p>
