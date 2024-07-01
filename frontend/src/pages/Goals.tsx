@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import DialogAddNewGoal from "../components/DialogAddNewGoal.tsx";
 import GoalSingleItem from "../components/GoalSingleItem.tsx";
 import {Goal} from "../model/goal.ts";
+import Motivation from "../components/Motivation.tsx";
 
 type GoalsProps = {
     user: githubUser | null | undefined;
@@ -28,6 +29,9 @@ export default function Goals(props: Readonly<GoalsProps>){
 
     return (
         <section>
+
+            <Motivation user={props.user as githubUser}/>
+
             <h3>Goals</h3>
            <Button onClick={()=> navigate("/")}>Navigate</Button>
 
