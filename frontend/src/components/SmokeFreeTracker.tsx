@@ -16,23 +16,19 @@ import {githubUser, UserDTO} from "../model/userModel.ts";
 
 
 export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser }> )  {
-    const [cigarettes, setCigarettes] = useState(1);
+    const [cigarettes, setCigarettes] = useState<number>(0);
     const [trackingActive, setTrackingActive] = useState<boolean>();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [stopSnackbarOpen, setStopSnackbarOpen] = useState(false);
+    const [inputIsTouched, setInputIsTouched] = useState(false);
 
 
 
-    const handleOpenDialog = () => {
-        setDialogOpen(true);
+    const handleDialog = () => {
+        setDialogOpen(!dialogOpen);
     };
-
-    const handleCloseDialog = () => {
-        setDialogOpen(false);
-    };
-
 
     const handleStartTracking = () => {
         setTrackingActive(true);
@@ -42,17 +38,13 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
         console.log(`Tracking started with ${cigarettes} cigarettes`);
     };
 
-    const handleOpenConfirmDialog = () => {
-        setConfirmDialogOpen(true);
-    };
-
-    const handleCloseConfirmDialog = () => {
-        setConfirmDialogOpen(false);
+    const handleConfirmDialog = () => {
+        setConfirmDialogOpen(!confirmDialogOpen);
     };
 
     const handleStopTracking = () => {
         setConfirmDialogOpen(false);
-        setCigarettes(1);
+        setCigarettes(0);
         setTrackingActive(false);
         setStopSnackbarOpen(true);
     };
@@ -97,19 +89,19 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
                     <Typography variant="body1">
                         Drücken Sie den Button, wenn Sie eine Zigarette geraucht haben.
                     </Typography>
-                    <Button variant="contained" color="secondary" onClick={handleOpenConfirmDialog}>
+                    <Button variant="contained" color="secondary" onClick={handleConfirmDialog}>
                         Zigarette geraucht
                     </Button>
                 </div>
             ) : (
                 <div>
-                    <Button variant="contained" color="primary" onClick={handleOpenDialog}>
+                    <Button variant="contained" color="primary" onClick={handleDialog}>
                         Rauchfrei-Tracking starten
                     </Button>
                 </div>
             )}
 
-            <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+            <Dialog open={dialogOpen} onClose={handleDialog}>
                 <DialogTitle>Anzahl gerauchter Zigaretten/Tag</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -118,15 +110,16 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
                         onChange={(e) => {
                             setCigarettes(+e.target.value);
                         }}
+                        onFocus={() => setInputIsTouched(true)}
                         fullWidth
                         required
                         InputProps={{ inputProps: { min: 1 } }}
-                        error={cigarettes < 1}
-                        helperText={cigarettes < 1 ? 'Bitte eine Zahl größer als 0 eingeben' : ''}
+                        error={cigarettes < 1 && inputIsTouched}
+                        helperText={cigarettes < 1 && inputIsTouched ? 'Bitte eine Zahl größer als 0 eingeben' : ''}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseDialog} color="secondary">
+                    <Button onClick={handleDialog} color="secondary">
                         Abbrechen
                     </Button>
                     <Button onClick={handleStartTracking} color="primary" disabled={cigarettes <= 0}>
@@ -135,7 +128,7 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
                 </DialogActions>
             </Dialog>
 
-            <Dialog open={confirmDialogOpen} onClose={handleCloseConfirmDialog}>
+            <Dialog open={confirmDialogOpen} onClose={handleConfirmDialog}>
                 <DialogTitle>Bestätigung</DialogTitle>
                 <DialogContent>
                     <Typography variant="body1">
@@ -143,7 +136,7 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
                     </Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseConfirmDialog} color="secondary">
+                    <Button onClick={handleConfirmDialog} color="secondary">
                         Abbrechen
                     </Button>
                     <Button onClick={handleStopTracking} color="primary">
