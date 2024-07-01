@@ -87,22 +87,15 @@ export default function SmokeFreeTracker( {user, isTracking, setIsTracking} : Re
 
 
     return (
-        <div>
+        <section>
             {isTracking ? (
-                <div>
-                    <Typography variant="body1">
-                        Drücken Sie den Button, wenn Sie eine Zigarette geraucht haben.
-                    </Typography>
-                    <Button variant="contained" color="secondary" onClick={handleConfirmDialog}>
-                        Zigarette geraucht
+                    <Button variant="outlined" color="error" onClick={handleConfirmDialog} size={"small"} sx={{mb: 2}}>
+                        Doch geraucht?
                     </Button>
-                </div>
             ) : (
-                <div>
-                    <Button variant="contained" color="primary" onClick={handleDialog}>
+                    <Button variant="contained" color="primary" onClick={handleDialog} size={"large"} sx={{mb: 2, p: 2}}>
                         Rauchfrei-Tracking starten
                     </Button>
-                </div>
             )}
 
             <Dialog open={dialogOpen} onClose={handleDialog}>
@@ -121,10 +114,11 @@ export default function SmokeFreeTracker( {user, isTracking, setIsTracking} : Re
                         InputProps={{ inputProps: { min: 1 } }}
                         error={cigarettes < 1 && inputIsTouched && cigarettes !== 0}
                         helperText={cigarettes < 1 && inputIsTouched && cigarettes !== 0 ? 'Bitte eine Zahl größer als 0 eingeben' : ''}
+                        sx={{ mt: 1 }}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDialog} color="secondary">
+                    <Button onClick={handleDialog} color="error">
                         Abbrechen
                     </Button>
                     <Button onClick={handleStartTracking} color="primary" disabled={cigarettes <= 0}>
@@ -137,7 +131,7 @@ export default function SmokeFreeTracker( {user, isTracking, setIsTracking} : Re
                 <DialogTitle>Bestätigung</DialogTitle>
                 <DialogContent>
                     <Typography variant="body1">
-                        Sind Sie sicher, dass Sie eine Zigarette geraucht haben möchten?
+                        Das Tracking wird zurückgesetzt!
                     </Typography>
                 </DialogContent>
                 <DialogActions>
@@ -145,7 +139,7 @@ export default function SmokeFreeTracker( {user, isTracking, setIsTracking} : Re
                         Abbrechen
                     </Button>
                     <Button onClick={handleStopTracking} color="primary">
-                        Ja, Zigarette geraucht
+                        OK
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -178,6 +172,6 @@ export default function SmokeFreeTracker( {user, isTracking, setIsTracking} : Re
                     Rauchfrei-Tracking beendet
                 </Alert>
             </Snackbar>
-        </div>
+        </section>
     );
 }
