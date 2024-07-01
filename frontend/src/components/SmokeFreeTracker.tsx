@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import { updateUser } from "../service/userService.ts";
+import {startTracking, stopTracking} from "../service/userService.ts";
 import {
     Button,
     Dialog,
@@ -11,7 +11,7 @@ import {
     Typography,
     Alert
 } from '@mui/material';
-import {githubUser, UserDTO} from "../model/userModel.ts";
+import {githubUser} from "../model/userModel.ts";
 
 
 
@@ -34,7 +34,13 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
         setTrackingActive(true);
         setDialogOpen(false);
         setSnackbarOpen(true);
-        startTracking(user);
+        startTracking(user, cigarettes)
+            .then(() => {
+                console.log(`Tracking started with ${cigarettes} cigarettes`);
+            })
+            .catch((error) => {
+                console.error('Error starting tracking', error);
+            });
         console.log(`Tracking started with ${cigarettes} cigarettes`);
     };
 
@@ -47,6 +53,13 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
         setCigarettes(0);
         setTrackingActive(false);
         setStopSnackbarOpen(true);
+        stopTracking(user)
+            .then(() => {
+                console.log('Tracking stopped');
+            })
+            .catch((error) => {
+                console.error('Error stopping tracking', error);
+            });
     };
 
     const handleCloseSnackbar = () => {
@@ -66,21 +79,7 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
     }, [user.dailySmokedCigarettes]);
 
 
-    function startTracking(user : githubUser){
-        const updatedUser: UserDTO = {
-            dailySmokedCigarettes: cigarettes,
-            mainMotivation: user.mainMotivation,
-            quitDate: new Date().toISOString(),
-            goals: user.goals
-        };
-        updateUser(updatedUser, user.id)
-            .then(() => {
-                console.log('User updated', updatedUser)
-            })
-            .catch((error) => {
-                console.error('Error updating user', error);
-            });
-    }
+
 
     return (
         <div>

@@ -6,23 +6,24 @@ import { updateUserMotivation} from "../service/userService.ts";
 
 
 export default function Motivation( { user }: Readonly<{ user: githubUser }>) {
-    const [motivations, setMotivations] = useState<string[]>(user.mainMotivation);
+    const [currentUser, setCurrentUser] = useState(user);
     const [newMotivation, setNewMotivation] = useState('');
 
-
-    const handleAddMotivation = async () => {
-        const updatedMotivations = [...motivations, newMotivation];
-        setMotivations(updatedMotivations);
-        setNewMotivation('');
-
-        await updateUserMotivation(user, updatedMotivations);
+    const handleAddMotivation = () => {
+        const updatedMotivation = [...currentUser.mainMotivation, newMotivation];
+        updateUserMotivation(currentUser, updatedMotivation)
+            .then(updatedUser => {
+                setCurrentUser(updatedUser);
+                setNewMotivation('');
+            });
     };
 
-    const handleRemoveMotivation = async (index: number) => {
-        const updatedMotivations = motivations.filter((_, i) => i !== index);
-        setMotivations(updatedMotivations);
-
-        await updateUserMotivation(user, updatedMotivations);
+    const handleRemoveMotivation = (index: number) => {
+        const updatedMotivation = currentUser.mainMotivation.filter((_, i) => i !== index);
+        updateUserMotivation(currentUser, updatedMotivation)
+            .then(updatedUser => {
+                setCurrentUser(updatedUser);
+            });
     };
 
     return (

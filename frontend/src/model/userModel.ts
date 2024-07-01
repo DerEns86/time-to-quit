@@ -15,6 +15,6 @@ export type githubUser = {
 export type UserDTO = {
     dailySmokedCigarettes: number;
     mainMotivation: string[];
-    quitDate: string;
+    quitDate: string | null;
     goals: Goal[];
 }
