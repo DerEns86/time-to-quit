@@ -15,7 +15,7 @@ export default function Home(props: Readonly<HomeProps>) {
     const [isTracking, setIsTracking] = useState<boolean>(false);
 
     return (
-        <section>
+        <main>
             <h1>Willkommen <br/>{props.user?.username}</h1>
             <div>
                 <SmokeFreeTracker user={props.user as githubUser}
@@ -45,6 +45,6 @@ export default function Home(props: Readonly<HomeProps>) {
                 {props.goals.length > 0 ? <div>Du hast dir {props.goals.length} Ziele gesetzt</div>
                     : <div>Du hast noch keine Ziele gesetzt</div>}
             </div>
-        </section>
+        </main>
     )
 }
