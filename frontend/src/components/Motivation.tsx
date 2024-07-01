@@ -28,7 +28,7 @@ export default function Motivation( { user }: Readonly<{ user: githubUser }>) {
     return (
         <div>
             {user.mainMotivation.map((motivation, index) => (
-                <Paper key={index} >
+                <Paper key={motivation} >
                     <Typography variant="body1">{motivation}</Typography>
                     <div >
 

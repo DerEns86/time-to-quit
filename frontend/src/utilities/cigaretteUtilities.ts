@@ -18,8 +18,7 @@ export function savedMoney( user: githubUser | null | undefined ) {
 export function savedMoneyInAYear( user: githubUser | null | undefined ) {
     if (user?.quitDate) {
         const dailySavedMoney = user.dailySmokedCigarettes * 0.35;
-        const yearlySavedMoney = dailySavedMoney * 365;
-        return yearlySavedMoney;
+        return dailySavedMoney * 365;
     }
     return 0;
 }
