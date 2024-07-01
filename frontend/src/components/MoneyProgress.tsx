@@ -1,16 +1,18 @@
 import {Box, Paper} from "@mui/material";
 import {getNotSmokedCigarettes, savedMoney, savedMoneyInAYear} from "../utilities/cigaretteUtilities.ts";
 import {githubUser} from "../model/userModel.ts";
-import {useEffect, useState} from "react";
 
-export default function MoneyProgress({ user } : Readonly<{ user: githubUser }>) {
-    const [isTracking, setIsTracking] = useState<boolean>(false);
+type MoneyProgressProps = {
+    user: githubUser;
+    isTracking: boolean;
+    setIsTracking: (active: boolean) => void;
+};
 
-    useEffect(() => {
-        if (user.quitDate) {
-            setIsTracking(true);
-        }
-    }, [user]);
+
+export default function MoneyProgress({ user, isTracking } : Readonly<MoneyProgressProps>) {
+    // const [isTracking, setIsTracking] = useState<boolean>();
+
+
 
     
     return (

@@ -13,11 +13,16 @@ import {
 } from '@mui/material';
 import {githubUser} from "../model/userModel.ts";
 
+type SmokeFreeTrackerProps = {
+    user: githubUser;
+    isTracking: boolean;
+    setIsTracking: (active: boolean) => void;
+};
 
 
-export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser }> )  {
+export default function SmokeFreeTracker( {user, isTracking, setIsTracking} : Readonly<SmokeFreeTrackerProps> )  {
     const [cigarettes, setCigarettes] = useState<number>(0);
-    const [trackingActive, setTrackingActive] = useState<boolean>();
+    // const [trackingActive, setTrackingActive] = useState<boolean>();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -31,7 +36,7 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
     };
 
     const handleStartTracking = () => {
-        setTrackingActive(true);
+        setIsTracking(true);
         setDialogOpen(false);
         setSnackbarOpen(true);
         startTracking(user, cigarettes)
@@ -51,7 +56,7 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
     const handleStopTracking = () => {
         setConfirmDialogOpen(false);
         setCigarettes(0);
-        setTrackingActive(false);
+        setIsTracking(false);
         setStopSnackbarOpen(true);
         stopTracking(user)
             .then(() => {
@@ -72,18 +77,18 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
 
     useEffect(() => {
         if (user.dailySmokedCigarettes > 1) {
-            setTrackingActive(true);
+            setIsTracking(true);
         } else {
-            setTrackingActive(false);
+            setIsTracking(false);
         }
-    }, [user.dailySmokedCigarettes]);
+    }, [user.dailySmokedCigarettes, setIsTracking]);
 
 
 
 
     return (
         <div>
-            {trackingActive ? (
+            {isTracking ? (
                 <div>
                     <Typography variant="body1">
                         Drücken Sie den Button, wenn Sie eine Zigarette geraucht haben.
@@ -108,13 +113,14 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
                         value={cigarettes}
                         onChange={(e) => {
                             setCigarettes(+e.target.value);
+                            setInputIsTouched(true);
                         }}
                         onFocus={() => setInputIsTouched(true)}
                         fullWidth
                         required
                         InputProps={{ inputProps: { min: 1 } }}
-                        error={cigarettes < 1 && inputIsTouched}
-                        helperText={cigarettes < 1 && inputIsTouched ? 'Bitte eine Zahl größer als 0 eingeben' : ''}
+                        error={cigarettes < 1 && inputIsTouched && cigarettes !== 0}
+                        helperText={cigarettes < 1 && inputIsTouched && cigarettes !== 0 ? 'Bitte eine Zahl größer als 0 eingeben' : ''}
                     />
                 </DialogContent>
                 <DialogActions>
