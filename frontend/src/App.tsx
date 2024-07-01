@@ -30,17 +30,18 @@ function App() {
     }
 
     useEffect(() => {
-        loadUser().then(user => {
+        const fetchData = async () => {
+            const user = await loadUser();
             setUser(user);
             console.log(user);
             if (user) {
-                loadGoals(user.id).then(response => {
-                    setGoals(response.data);
-                });
+                const response = await loadGoals(user.id);
+                setGoals(response.data);
             } else {
                 navigate("/login");
             }
-        });
+        };
+        fetchData();
     }, [navigate]);
 
 

@@ -1,7 +1,6 @@
 import { githubUser} from "../model/userModel.ts";
 
-
-export  function getNotSmokedCigarettes( user: githubUser | null | undefined ) {
+export function getNotSmokedCigarettes( user: githubUser | null | undefined ) {
     if (user?.quitDate) {
         const quitDate = new Date(user.quitDate);
         const today = new Date();
@@ -12,6 +11,14 @@ export  function getNotSmokedCigarettes( user: githubUser | null | undefined ) {
     return 0;
 }
 
-export  function savedMoney( user: githubUser | null | undefined ) {
+export function savedMoney( user: githubUser | null | undefined ) {
     return getNotSmokedCigarettes(user) * 0.35;
+}
+
+export function savedMoneyInAYear( user: githubUser | null | undefined ) {
+    if (user?.quitDate) {
+        const dailySavedMoney = user.dailySmokedCigarettes * 0.35;
+        return dailySavedMoney * 365;
+    }
+    return 0;
 }

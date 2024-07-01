@@ -1,7 +1,7 @@
 import {githubUser} from "../model/userModel.ts";
 import React, {useState} from "react";
 import {Goal, GoalDTO} from "../model/goal.ts";
-import {addGoal} from "../service/userService.ts";
+import {addGoal, updateUser} from "../service/userService.ts";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
 
 type Dialog_AddNewGoalProps = {
@@ -11,12 +11,12 @@ type Dialog_AddNewGoalProps = {
     addGoal: (newGoal: Goal) => void;
 }
 
-export default function DialogAddNewGoal(props: Readonly<Dialog_AddNewGoalProps>){
+export default function DialogAddNewGoal(props: Readonly<Dialog_AddNewGoalProps>) {
     const [goals, setGoals] = useState<Goal[]>(props.user?.goals || []);
     const [goalName, setGoalName] = useState("");
     const [goalPrice, setGoalPrice] = useState(0);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log("Goal Name: ", goalName);
         console.log("Goal Price: ", goalPrice);
@@ -25,17 +25,19 @@ export default function DialogAddNewGoal(props: Readonly<Dialog_AddNewGoalProps>
             goalPrice: goalPrice
         };
         if (props.user) {
-            addGoal(newGoal, props.user.id)
+            await addGoal(newGoal, props.user.id)
                 .then(response => {
                     const addedGoal = response.data;
                     setGoals(prevGoals => [...prevGoals, addedGoal]);
                     props.addGoal(addedGoal);
                     console.log(props.user?.goals);
                     console.log(goals)
+                    props.user?.goals.push(addedGoal);
                 })
                 .catch(error => {
                     console.error("Error adding goal: ", error);
                 });
+            await updateUser(props.user, props.user.id);
         }
         setGoalName("");
         setGoalPrice(0);

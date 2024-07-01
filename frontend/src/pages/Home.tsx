@@ -1,10 +1,9 @@
 import {githubUser} from "../model/userModel.ts";
-import { getNotSmokedCigarettes, savedMoney } from "../utilities/cigaretteUtilities.ts"
 import "./../main.css"
 import "./../css/home.css"
-import {Button} from "@mui/material";
-import {useNavigate} from "react-router-dom";
 import {Goal} from "../model/goal.ts";
+import SmokeFreeTracker from "../components/SmokeFreeTracker.tsx";
+import MoneyProgress from "../components/MoneyProgress.tsx";
 
 type HomeProps = {
     user: githubUser | null | undefined;
@@ -12,48 +11,31 @@ type HomeProps = {
 }
 
 export default function Home(props: Readonly<HomeProps>) {
-    const navigate = useNavigate();
 
-
-
-    console.log('User data in Home:', props.user);
     return (
         <section>
-            <h1>Home</h1>
+            <h1>Willkommen <br/>{props.user?.username}</h1>
             <div>
-                {props.user?.quitDate === null ? <Button onClick={() => navigate("/goals")}>Navigate</Button> :
-                <div >
-                    {getNotSmokedCigarettes(props.user) > 0 &&
-                        <div>
-                            You have not smoked {getNotSmokedCigarettes(props.user)} cigarettes
-                        </div>
-                    }
-                    {savedMoney(props.user) > 0 &&
-                        <div>You have
-                            saved {savedMoney(props.user).toFixed(2)} EUR</div>}
-                </div>
-                }
-                <p>Welcome {props.user?.username}</p>
-                <p>Welcome {props.user?.id}</p>
-                <p>{props.user?.dailySmokedCigarettes}</p>
-                <p>{props.user?.mainMotivation[0]}</p>
-                <p>{props.user?.mainMotivation[1]}</p>
-                <p>{props.user?.quitDate ? new Date(props.user.quitDate).toLocaleDateString() : 'N/A'}</p>
-                <p style={{
-                    maxWidth: "200px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis"
-                }}>{props.user?.avatar_url}</p>
+                <SmokeFreeTracker user={props.user as githubUser}/>
+                <MoneyProgress user={props.user as githubUser}/>
 
-                <h3>Goals</h3>
-                {props.goals.map((goal) => (
-                    <div key={goal.goalId}>
-                        <p>Goal ID: {goal.goalId}</p>
-                        <p>Goal Name: {goal.goalName}</p>
-                        <p>Goal Price: {goal.goalPrice}</p>
-                        <p>Is Completed: {goal.isCompleted ? 'Yes' : 'No'}</p>
+                <h4>Motivation</h4>
+                {props.user?.mainMotivation.length === 0 ? <div>Du hast noch keine Motivationen gesetzt</div>
+                    : <div>
+                        {props.user?.mainMotivation.map((motivation) => {
+                            return <div
+                                key={motivation}>
+                                {motivation}
+                            </div>
+                        })}
+
                     </div>
-                ))}
+                }
+
+
+                <h4>Goals</h4>
+                {props.goals.length > 0 ? <div>Du hast dir {props.goals.length} Ziele gesetzt</div>
+                    : <div>Du hast noch keine Ziele gesetzt</div>}
             </div>
         </section>
     )
