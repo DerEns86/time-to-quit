@@ -1,7 +1,6 @@
 import {useState} from "react";
 import {githubUser} from "../model/userModel.ts";
-import {Button} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import {Button, Typography} from "@mui/material";
 import DialogAddNewGoal from "../components/DialogAddNewGoal.tsx";
 import GoalSingleItem from "../components/GoalSingleItem.tsx";
 import {Goal} from "../model/goal.ts";
@@ -16,7 +15,6 @@ type GoalsProps = {
 
 export default function Goals(props: Readonly<GoalsProps>){
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
 
 
     const handleClickOpen = () => {
@@ -29,17 +27,16 @@ export default function Goals(props: Readonly<GoalsProps>){
 
     return (
         <section>
-
+            <Typography variant={"h5"} className={"text-gray"} py={2}>Deine Motivation</Typography>
             <Motivation user={props.user as githubUser}/>
 
-            <h3>Goals</h3>
-           <Button onClick={()=> navigate("/")}>Navigate</Button>
+            <Typography variant={"h5"} className={"text-gray"} py={2}>Deine Ziele</Typography>
 
             {props.goals.map((goal) => (
                 <GoalSingleItem goal={goal} user={props.user} key={goal.goalId} deleteGoal={props.deleteGoal}/>
             ))}
 
-            <Button variant={"outlined"} onClick={handleClickOpen}>Add new goal</Button>
+            <Button variant={"outlined"} onClick={handleClickOpen}>Hinzufügen</Button>
             <DialogAddNewGoal user={props.user} open={open} handleClose={handleClose} addGoal={props.addGoal}/>
         </section>
     )

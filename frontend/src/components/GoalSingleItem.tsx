@@ -1,10 +1,11 @@
 import {Goal} from "../model/goal.ts";
-import {Box, Card, CardActions, CardContent, IconButton} from "@mui/material";
+import {Box, IconButton, Typography} from "@mui/material";
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DialogEditGoal from "./DialogEditGoal.tsx";
 import {githubUser} from "../model/userModel.ts";
 import {useState} from "react";
+import { StyledGoalPaper } from "./styles.ts";
 
 type GoalSingleItemProps = {
     goal: Goal;
@@ -22,42 +23,23 @@ export default function GoalSingleItem({goal, user, deleteGoal}: Readonly<GoalSi
     console.log("GoalSingleItem user:", user);
 
     return (
-        <Card variant="elevation" key={goal.goalId} sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "1rem",
-            maxWidth: "300px",
-
-        }}>
-            <CardContent sx={{
-                display: "flex",
-                // flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "unset",
+        <StyledGoalPaper elevation={8} key={goal.goalId} >
+            <Box sx={{
+                paddingLeft: 2,
+                textAlign: 'center',
+                maxWidth: 'calc(100% - 40px)'
             }}>
-                <Box>
-                    <p>Goal Name: {goal.goalName}</p>
-                    <p>Goal Price: {goal.goalPrice}</p>
-                    {/*<p>Is Completed: {goal.isCompleted ? 'Yes' : 'No'}</p>*/}
-                </Box>
-                <CardActions sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-end",
-                }}>
-                    <IconButton onClick={() => setEditOpen(true)}>
-                        <ModeEditOutlineOutlinedIcon color="primary" fontSize="small"/>
-                    </IconButton>
-                    <IconButton onClick={() => deleteGoal(goal.goalId)}>
-                        <DeleteOutlineOutlinedIcon color="error" fontSize="small"/>
-                    </IconButton>
-                </CardActions>
-            </CardContent>
-
+                <Typography variant={"body1"}>{goal.goalName} für {goal.goalPrice}€</Typography>
+            </Box>
+            <Box style={{width: '40px'}}>
+                <IconButton onClick={() => setEditOpen(true)}>
+                    <ModeEditOutlineOutlinedIcon color="inherit" fontSize="small"/>
+                </IconButton>
+                <IconButton onClick={() => deleteGoal(goal.goalId)}>
+                    <DeleteOutlineOutlinedIcon color="error" fontSize="small"/>
+                </IconButton>
+            </Box>
             <DialogEditGoal user={user} goal={goal} open={editOpen} handleClose={handleEditClose} />
-        </Card>
+        </StyledGoalPaper>
     )
 }
