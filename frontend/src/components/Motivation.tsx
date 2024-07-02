@@ -1,21 +1,23 @@
 import {
-    Alert,
+    Alert, Box,
     Button,
     Dialog, DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
     IconButton,
-    Paper, Snackbar, TextField,
+    Snackbar,
+    TextField,
     Typography
 } from "@mui/material";
 import {githubUser} from "../model/userModel.ts";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { useState} from "react";
-import { updateUserMotivation} from "../service/userService.ts";
+import {useState} from "react";
+import {updateUserMotivation} from "../service/userService.ts";
+import {StyledMotivationPaper} from "./styles.ts";
 
 
-export default function Motivation( { user }: Readonly<{ user: githubUser }>) {
+export default function Motivation({user}: Readonly<{ user: githubUser }>) {
     const [currentUser, setCurrentUser] = useState(user);
     const [newMotivation, setNewMotivation] = useState('');
     const [open, setOpen] = useState(false);
@@ -65,19 +67,25 @@ export default function Motivation( { user }: Readonly<{ user: githubUser }>) {
     };
 
     return (
-        <div>
+        <>
             {currentUser.mainMotivation.map((motivation, index) => (
-                <Paper key={motivation} >
-                    <Typography variant="body1">{motivation}</Typography>
-                    <div >
+                <StyledMotivationPaper key={motivation} elevation={8}>
+                    <Typography variant="body1"
+                                sx={{
+                                    paddingLeft: 2,
+                                    textAlign: 'center',
+                                    maxWidth: 'calc(100% - 40px)'
+                                }}
+                    >{motivation}</Typography>
+                    <Box style={{width: '40px'}}>
 
                         <IconButton onClick={() => handleRemoveMotivation(index)}>
                             <DeleteOutlineOutlinedIcon color="error" fontSize="small"/>
                         </IconButton>
-                    </div>
-                </Paper>
+                    </Box>
+                </StyledMotivationPaper>
             ))}
-            <Button size="small" color="primary" onClick={handleOpenDialog}>
+            <Button color="primary" variant={"outlined"} onClick={handleOpenDialog}>
                 Hinzufügen
             </Button>
             <Dialog open={open} onClose={handleCloseDialog}>
@@ -117,7 +125,7 @@ export default function Motivation( { user }: Readonly<{ user: githubUser }>) {
                     onClose={handleCloseSnackbar}
                     severity="success"
                     variant="filled"
-                    sx={{ width: '100%' }}
+                    sx={{width: '100%'}}
                 >
                     Motivation hinzugefügt!
                 </Alert>
@@ -132,11 +140,11 @@ export default function Motivation( { user }: Readonly<{ user: githubUser }>) {
                     onClose={handleCloseStopSnackbar}
                     severity="warning"
                     variant="filled"
-                    sx={{ width: '100%' }}
+                    sx={{width: '100%'}}
                 >
                     Motivation gelöscht!
                 </Alert>
             </Snackbar>
-        </div>
+        </>
     )
 }
