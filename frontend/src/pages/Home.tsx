@@ -1,6 +1,5 @@
 import {githubUser} from "../model/userModel.ts";
-import "./../main.css"
-import "./../css/home.css"
+import "./../main.css";
 import {Goal} from "../model/goal.ts";
 import SmokeFreeTracker from "../components/SmokeFreeTracker.tsx";
 import MoneyProgress from "../components/MoneyProgress.tsx";
