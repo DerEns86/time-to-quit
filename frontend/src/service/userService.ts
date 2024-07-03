@@ -24,7 +24,40 @@ export function updateUser(user: UserDTO, userId: string) {
     return axios.put(`api/users/${userId}`, user);
 }
 
-export async function updateUserMotivation(user: githubUser, newMotivation: string[]) {
+export async function startTracking(user : githubUser, cigarettes: number){
+    const updatedUser: UserDTO = {
+        dailySmokedCigarettes: cigarettes,
+        mainMotivation: user.mainMotivation,
+        quitDate: new Date().toISOString(),
+        goals: user.goals
+    };
+
+        try{
+           await updateUser(updatedUser, user.id)
+              console.log('User updated', updatedUser);
+        } catch (error) {
+            console.error('Error updating user', error);
+        }
+}
+
+export async function stopTracking(user: githubUser) {
+    const updatedUser: UserDTO = {
+        dailySmokedCigarettes: 0,
+        mainMotivation: user.mainMotivation,
+        quitDate: null,
+        goals: user.goals
+    };
+    try {
+        const response = await updateUser(updatedUser, user.id);
+        console.log('User updated', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user', error);
+        throw error;
+    }
+}
+
+export async function updateUserMotivation(user: githubUser, newMotivation: string[]): Promise<githubUser> {
     const updatedUser: UserDTO = {
         dailySmokedCigarettes: user.dailySmokedCigarettes,
         mainMotivation: newMotivation,
@@ -32,9 +65,11 @@ export async function updateUserMotivation(user: githubUser, newMotivation: stri
         goals: user.goals
     };
     try {
-        await updateUser(updatedUser, user.id);
-        console.log('User updated', updatedUser);
+        const response = await updateUser(updatedUser, user.id);
+        console.log('User updated', response.data);
+        return response.data;
     } catch (error) {
         console.error('Error updating user', error);
+        throw error; // re-throw the error to be handled by the caller
     }
 }

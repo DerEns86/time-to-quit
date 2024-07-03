@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import { updateUser } from "../service/userService.ts";
+import {startTracking, stopTracking} from "../service/userService.ts";
 import {
     Button,
     Dialog,
@@ -11,13 +11,18 @@ import {
     Typography,
     Alert
 } from '@mui/material';
-import {githubUser, UserDTO} from "../model/userModel.ts";
+import {githubUser} from "../model/userModel.ts";
+
+type SmokeFreeTrackerProps = {
+    user: githubUser;
+    isTracking: boolean;
+    setIsTracking: (active: boolean) => void;
+};
 
 
-
-export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser }> )  {
+export default function SmokeFreeTracker( {user, isTracking, setIsTracking} : Readonly<SmokeFreeTrackerProps> )  {
     const [cigarettes, setCigarettes] = useState<number>(0);
-    const [trackingActive, setTrackingActive] = useState<boolean>();
+    // const [trackingActive, setTrackingActive] = useState<boolean>();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -31,10 +36,16 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
     };
 
     const handleStartTracking = () => {
-        setTrackingActive(true);
+        setIsTracking(true);
         setDialogOpen(false);
         setSnackbarOpen(true);
-        startTracking(user);
+        startTracking(user, cigarettes)
+            .then(() => {
+                console.log(`Tracking started with ${cigarettes} cigarettes`);
+            })
+            .catch((error) => {
+                console.error('Error starting tracking', error);
+            });
         console.log(`Tracking started with ${cigarettes} cigarettes`);
     };
 
@@ -45,8 +56,15 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
     const handleStopTracking = () => {
         setConfirmDialogOpen(false);
         setCigarettes(0);
-        setTrackingActive(false);
+        setIsTracking(false);
         setStopSnackbarOpen(true);
+        stopTracking(user)
+            .then(() => {
+                console.log('Tracking stopped');
+            })
+            .catch((error) => {
+                console.error('Error stopping tracking', error);
+            });
     };
 
     const handleCloseSnackbar = () => {
@@ -59,46 +77,25 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
 
     useEffect(() => {
         if (user.dailySmokedCigarettes > 1) {
-            setTrackingActive(true);
+            setIsTracking(true);
         } else {
-            setTrackingActive(false);
+            setIsTracking(false);
         }
-    }, [user.dailySmokedCigarettes]);
+    }, [user.dailySmokedCigarettes, setIsTracking]);
 
 
-    function startTracking(user : githubUser){
-        const updatedUser: UserDTO = {
-            dailySmokedCigarettes: cigarettes,
-            mainMotivation: user.mainMotivation,
-            quitDate: new Date().toISOString(),
-            goals: user.goals
-        };
-        updateUser(updatedUser, user.id)
-            .then(() => {
-                console.log('User updated', updatedUser)
-            })
-            .catch((error) => {
-                console.error('Error updating user', error);
-            });
-    }
+
 
     return (
-        <div>
-            {trackingActive ? (
-                <div>
-                    <Typography variant="body1">
-                        Drücken Sie den Button, wenn Sie eine Zigarette geraucht haben.
-                    </Typography>
-                    <Button variant="contained" color="secondary" onClick={handleConfirmDialog}>
-                        Zigarette geraucht
+        <section>
+            {isTracking ? (
+                    <Button variant="outlined" color="error" onClick={handleConfirmDialog} size={"small"} sx={{mb: 2}}>
+                        Doch geraucht?
                     </Button>
-                </div>
             ) : (
-                <div>
-                    <Button variant="contained" color="primary" onClick={handleDialog}>
+                    <Button variant="contained" color="primary" onClick={handleDialog} size={"large"} sx={{mb: 2, p: 2}}>
                         Rauchfrei-Tracking starten
                     </Button>
-                </div>
             )}
 
             <Dialog open={dialogOpen} onClose={handleDialog}>
@@ -109,17 +106,19 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
                         value={cigarettes}
                         onChange={(e) => {
                             setCigarettes(+e.target.value);
+                            setInputIsTouched(true);
                         }}
                         onFocus={() => setInputIsTouched(true)}
                         fullWidth
                         required
                         InputProps={{ inputProps: { min: 1 } }}
-                        error={cigarettes < 1 && inputIsTouched}
-                        helperText={cigarettes < 1 && inputIsTouched ? 'Bitte eine Zahl größer als 0 eingeben' : ''}
+                        error={cigarettes < 1 && inputIsTouched && cigarettes !== 0}
+                        helperText={cigarettes < 1 && inputIsTouched && cigarettes !== 0 ? 'Bitte eine Zahl größer als 0 eingeben' : ''}
+                        sx={{ mt: 1 }}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDialog} color="secondary">
+                    <Button onClick={handleDialog} color="error">
                         Abbrechen
                     </Button>
                     <Button onClick={handleStartTracking} color="primary" disabled={cigarettes <= 0}>
@@ -132,7 +131,7 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
                 <DialogTitle>Bestätigung</DialogTitle>
                 <DialogContent>
                     <Typography variant="body1">
-                        Sind Sie sicher, dass Sie eine Zigarette geraucht haben möchten?
+                        Das Tracking wird zurückgesetzt!
                     </Typography>
                 </DialogContent>
                 <DialogActions>
@@ -140,7 +139,7 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
                         Abbrechen
                     </Button>
                     <Button onClick={handleStopTracking} color="primary">
-                        Ja, Zigarette geraucht
+                        OK
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -173,6 +172,6 @@ export default function SmokeFreeTracker( { user }: Readonly<{ user: githubUser 
                     Rauchfrei-Tracking beendet
                 </Alert>
             </Snackbar>
-        </div>
+        </section>
     );
 }

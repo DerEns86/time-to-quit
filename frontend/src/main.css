@@ -8,6 +8,14 @@ body{
     max-width: 1920px;
     box-sizing: border-box;
 }
+.text-gray{
+    color: darkslategray;
+}
+
+.action-button{
+    position: absolute;
+    right: 16px;
+}
 
 .d-flex {
     display: flex;
@@ -28,8 +36,15 @@ body{
     gap: 6px;
 }
 
-section{
+main{
     padding: 0 16px 0 16px;
+}
+
+section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 header{
