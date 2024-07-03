@@ -3,17 +3,18 @@ import "./../main.css";
 import {Goal} from "../model/goal.ts";
 import SmokeFreeTracker from "../components/SmokeFreeTracker.tsx";
 import MoneyProgress from "../components/MoneyProgress.tsx";
-import {useState} from "react";
 import {Box, Typography} from "@mui/material";
 import {StyledGoalPaperNoActions, StyledMotivationPaperNoActions} from "../components/styles.ts";
 
 type HomeProps = {
     user: githubUser | null | undefined;
     goals: Goal[];
+    isTracking: boolean;
+    setIsTracking: (active: boolean) => void;
 }
 
 export default function Home(props: Readonly<HomeProps>) {
-    const [isTracking, setIsTracking] = useState<boolean>(false);
+
 
     return (
         <main>
@@ -27,12 +28,12 @@ export default function Home(props: Readonly<HomeProps>) {
             >Willkommen {props.user?.username}</Typography>
 
             <SmokeFreeTracker user={props.user as githubUser}
-                              isTracking={isTracking}
-                              setIsTracking={setIsTracking}
+                              isTracking={props.isTracking}
+                              setIsTracking={props.setIsTracking}
             />
             <MoneyProgress user={props.user as githubUser}
-                           isTracking={isTracking}
-                           setIsTracking={setIsTracking}
+                           isTracking={props.isTracking}
+                           setIsTracking={props.setIsTracking}
             />
 
             <section>
