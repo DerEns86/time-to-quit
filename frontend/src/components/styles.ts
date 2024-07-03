@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { Paper } from "@mui/material";
+import {ListItem, Paper} from "@mui/material";
 
 export const StyledMoneyPaper = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(2),
@@ -63,4 +63,17 @@ export const StyledGoalPaper = styled(Paper)(({ theme }) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+}));
+
+export const StyledListItem = styled(ListItem)(({ theme }) => ({
+    backgroundColor: 'white',
+    borderRadius: '8px',
+    marginBottom: theme.spacing(1),
+    padding: theme.spacing(1),
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: 'calc(100% - 32px)',
+    maxWidth: '400px',
+    marginInline: '16px',
 }));

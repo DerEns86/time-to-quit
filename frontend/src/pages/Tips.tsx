@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {Tip} from "../model/tip.ts";
 import {getMotivations, getTips} from "../service/contentService.ts";
 import {Motivations} from "../model/motivation.ts";
+import {Box, List, ListItemText, Typography} from "@mui/material";
+import {StyledListItem} from "../components/styles.ts";
 
 export default function Tips(){
     const [tips, setTips] = useState<Tip>({type: "tips", data: []});
@@ -26,21 +28,38 @@ export default function Tips(){
 }, []);
 
     return(
-        <>
-            <h6>Tips</h6>
-            <p>Tips</p>
-            <ul>
-                {tips.data.map((tip) => {
-                    return <li key={tip}>{tip}</li>
-                })}
-            </ul>
+        <section>
+            {tips && (
+                <Box >
+                    <Typography variant={"h6"} fontWeight={"bold"} className={"text-gray"} textAlign={"center"} my={0.9}>Tipps</Typography>
+                    <List sx={{
+                        height: "35vh",
+                        overflowY: "scroll",
+                    }}>
+                        {tips.data.map((tip) => (
+                            <StyledListItem key={tip}>
+                                <ListItemText primary={tip} />
+                            </StyledListItem>
+                        ))}
+                    </List>
+                </Box>
+            )}
 
-            <p>Motivation</p>
-            <ul>
-                {motivations.data.map((motivation) => {
-                    return <li key={motivation}>{motivation}</li>
-                })}
-            </ul>
-        </>
+            {motivations && (
+                <Box >
+                    <Typography variant={"h6"} fontWeight={"bold"} className={"text-gray"} textAlign={"center"} my={0.9}>Motivationen</Typography>
+                    <List sx={{
+                        height: "35vh",
+                        overflowY: "scroll",
+                    }}>
+                        {motivations.data.map((motivation) => (
+                            <StyledListItem key={motivation}>
+                                <ListItemText primary={motivation} />
+                            </StyledListItem>
+                        ))}
+                    </List>
+                </Box>
+            )}
+        </section>
     )
 }
