@@ -73,7 +73,7 @@ export default function Motivation({user}: Readonly<{ user: githubUser }>) {
                     <Typography variant="body1"
                                 sx={{
                                     paddingLeft: 2,
-                                    textAlign: 'center',
+                                    textAlign: 'start',
                                     maxWidth: 'calc(100% - 40px)'
                                 }}
                     >{motivation}</Typography>

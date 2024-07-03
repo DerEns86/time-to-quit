@@ -42,7 +42,7 @@ function App() {
             }
         };
         fetchData();
-    }, [navigate]);
+    }, [navigate, user]);
 
 
 return (

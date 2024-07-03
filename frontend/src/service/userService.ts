@@ -53,7 +53,7 @@ export async function stopTracking(user: githubUser) {
         return response.data;
     } catch (error) {
         console.error('Error updating user', error);
-        throw error; // re-throw the error to be handled by the caller
+        throw error;
     }
 }
 
