@@ -15,6 +15,7 @@ import {loadGoals, deleteGoal} from "./service/userService";
 function App() {
     const [user, setUser] = useState<githubUser | null | undefined>(undefined)
     const [goals, setGoals] = useState<Goal[]>([]);
+    const [isTracking, setIsTracking] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const addGoal = (newGoal: Goal) => {
@@ -42,7 +43,7 @@ function App() {
             }
         };
         fetchData();
-    }, [navigate, user]);
+    }, [navigate, isTracking]);
 
 
 return (
@@ -53,7 +54,7 @@ return (
             <Route path="/login" element={<Login user={user} login={login}/>}/>
 
             <Route element={<ProtectedRoute user={user}/>}>
-                <Route path="/" element={<Home user={user} goals={goals}/>}/>
+                <Route path="/" element={<Home user={user} goals={goals} isTracking={isTracking} setIsTracking={setIsTracking}/>}/>
                 <Route path="/goals" element={<Goals user={user} goals={goals} addGoal={addGoal} deleteGoal={deleteSingleGoal}/>}/>
             </Route>
         </Routes>
