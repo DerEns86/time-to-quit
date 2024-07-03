@@ -9,6 +9,8 @@ import Header from "./components/shared/Header.tsx";
 import Goals from "./pages/Goals.tsx";
 import {Goal} from "./model/goal.ts";
 import {loadGoals, deleteGoal} from "./service/userService";
+import Health from "./pages/Health.tsx";
+import Tips from "./pages/Tips.tsx";
 
 
 
@@ -56,6 +58,8 @@ return (
             <Route element={<ProtectedRoute user={user}/>}>
                 <Route path="/" element={<Home user={user} goals={goals} isTracking={isTracking} setIsTracking={setIsTracking}/>}/>
                 <Route path="/goals" element={<Goals user={user} goals={goals} addGoal={addGoal} deleteGoal={deleteSingleGoal}/>}/>
+                <Route path={"/tips"} element={<Tips/>}/>
+                <Route path={"/health"} element={<Health/>}/>
             </Route>
         </Routes>
     </>
