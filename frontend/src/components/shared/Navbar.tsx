@@ -1,6 +1,6 @@
 import {useState} from "react";
 import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
-import {HomeOutlined, FlagCircleOutlined, TipsAndUpdatesOutlined } from "@mui/icons-material";
+import {HomeOutlined, FlagCircleOutlined, TipsAndUpdatesOutlined, MonitorHeartOutlined } from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 
 
@@ -20,7 +20,8 @@ export default function Navbar() {
                 >
                     <BottomNavigationAction label="Goals" icon={<FlagCircleOutlined />} onClick={()=> navigate("/goals")}/>
                     <BottomNavigationAction label="Home" icon={<HomeOutlined />} onClick={()=> navigate("/")}/>
-                    <BottomNavigationAction label="Tips" icon={<TipsAndUpdatesOutlined />} />
+                    <BottomNavigationAction label="Health" icon={<MonitorHeartOutlined />} onClick={()=> navigate("/health")}/>
+                    <BottomNavigationAction label="Tips" icon={<TipsAndUpdatesOutlined />} onClick={()=> navigate("/tips")}/>
                 </BottomNavigation>
             </Box>
         </nav>
