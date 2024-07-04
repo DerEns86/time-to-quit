@@ -20,7 +20,7 @@ export default function Navbar() {
                 >
                     <BottomNavigationAction label="Goals" icon={<FlagCircleOutlined />} onClick={()=> navigate("/goals")}/>
                     <BottomNavigationAction label="Home" icon={<HomeOutlined />} onClick={()=> navigate("/")}/>
-                    <BottomNavigationAction label="Healt" icon={<MonitorHeartOutlined />} onClick={()=> navigate("/health")}/>
+                    <BottomNavigationAction label="Health" icon={<MonitorHeartOutlined />} onClick={()=> navigate("/health")}/>
                     <BottomNavigationAction label="Tips" icon={<TipsAndUpdatesOutlined />} onClick={()=> navigate("/tips")}/>
                 </BottomNavigation>
             </Box>

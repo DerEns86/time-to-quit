@@ -1,6 +1,8 @@
 import {Progress} from "../model/progress.ts";
 import {useEffect, useState} from "react";
 import {getProgress} from "../service/contentService.ts";
+import {Box, Typography} from "@mui/material";
+import {StyledHealthPaper} from "../components/styles.ts";
 
 export default function Health(){
     const [progress, setProgress] = useState<Progress | null>({type: "progress", data: []});
@@ -16,23 +18,17 @@ export default function Health(){
     }, []);
 
     return(
-        <>
-            <h6>Health</h6>
-            <p>Health state</p>
-
-            {progress && (
-                <div>
-                    <h2>Fortschritt</h2>
-                    <ul>
-                        {progress.data.map((item) => (
-                            <li key={item.timeframe}>
-                                <strong>{item.timeframe}:</strong> {item.description}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-
-        </>
+        <section>
+            <Typography variant={"h5"} className={"text-gray"} py={2}>Was verbessert sich?</Typography>
+                    {progress && (
+                        <Box >
+                            {progress.data.map((item) => (
+                                <StyledHealthPaper key={item.timeframe} elevation={3} sx={{  width: '60vw'}}>
+                                    <Typography variant="body1" className={"text-gray"}><strong>{item.timeframe}:</strong> {item.description}</Typography>
+                                </StyledHealthPaper>
+                            ))}
+                        </Box>
+                    )}
+        </section>
     )
 }
