@@ -3,8 +3,12 @@ import "./../main.css";
 import {Goal} from "../model/goal.ts";
 import SmokeFreeTracker from "../components/SmokeFreeTracker.tsx";
 import MoneyProgress from "../components/MoneyProgress.tsx";
-import {Box, Typography} from "@mui/material";
-import {StyledGoalPaperNoActions, StyledMotivationPaperNoActions} from "../components/styles.ts";
+import { Typography } from "@mui/material";
+import {
+    StyledGoalPaperNoActions,
+    StyledMotivationPaperNoActions,
+    StyledPlaceholderPaper
+} from "../components/styles.ts";
 
 type HomeProps = {
     user: githubUser | null | undefined;
@@ -15,7 +19,6 @@ type HomeProps = {
 
 export default function Home(props: Readonly<HomeProps>) {
 
-
     return (
         <main>
             <Typography
@@ -25,7 +28,7 @@ export default function Home(props: Readonly<HomeProps>) {
                     paddingY: 2
             }}
 
-            >Willkommen {props.user?.username}</Typography>
+            >Hallo, {props.user?.username.split(" ")[0]}</Typography>
 
             <SmokeFreeTracker user={props.user as githubUser}
                               isTracking={props.isTracking}
@@ -38,7 +41,7 @@ export default function Home(props: Readonly<HomeProps>) {
 
             <section>
                 <Typography variant={"subtitle1"} fontWeight={"bold"} className={"text-gray"}>"Warum?"</Typography>
-                {props.user?.mainMotivation.length === 0 ? <div>Du hast noch keine Motivationen gesetzt</div>
+                {props.user?.mainMotivation.length === 0 ? <StyledPlaceholderPaper>Du hast noch keine Motivationen eingegeben</StyledPlaceholderPaper>
                     : props.user?.mainMotivation.map((motivation) => {
                         return <StyledMotivationPaperNoActions
                             variant={"elevation"}
@@ -67,7 +70,8 @@ export default function Home(props: Readonly<HomeProps>) {
                             </StyledGoalPaperNoActions>
                         })}
                     </>
-                    : <Box>Du hast noch keine Ziele festgelegt</Box>}
+                    :<StyledPlaceholderPaper>Du hast noch keine Ziele festgelegt</StyledPlaceholderPaper>
+                    }
             </section>
 
 

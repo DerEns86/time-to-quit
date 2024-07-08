@@ -39,7 +39,7 @@ export default function Tips() {
     }, []);
 
     return (
-        <section style={{marginTop: "10vh"}}>
+        <section style={{marginTop: "calc(50% - 80px)"}}>
             <Typography variant={"h6"} fontWeight={"bold"} textAlign={"center"} className={"text-gray"} my={0.9}>Tipps</Typography>
 
 

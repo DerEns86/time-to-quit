@@ -16,7 +16,7 @@ export default function Login({user, login}: Readonly<LoginProps>) {
 
             {!user && <Button variant="outlined"
                               onClick={login}
-                              sx={{ borderColor: 'black' ,color: 'black', '&:hover': { bgcolor: 'darkgray' }, '&:focus': { borderColor: 'black' } }}>
+                              sx={{ borderColor: 'black' ,color: 'black', '&:hover': { bgcolor: 'darkgray' }, '&:focus': { borderColor: 'black' }, marginTop: '20vh' }}>
                 <img src={githubLogo} className="githubLogo" alt="github logo"/>Login with Github
             </Button>
             }
