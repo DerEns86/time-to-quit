@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import {getNotSmokedCigarettes, savedMoney, savedMoneyInAYear} from "../utilities/cigaretteUtilities.ts";
 import {githubUser} from "../model/userModel.ts";
-import { StyledMoneyPaper } from "./styles";
+import {StyledMoneyPaper, StyledPlaceholderPaper} from "./styles";
 import {useEffect} from "react";
 
 type MoneyProgressProps = {
@@ -17,7 +17,7 @@ export default function MoneyProgress({user, isTracking}: Readonly<MoneyProgress
     }, [isTracking]);
     return (
         <section>
-            {!isTracking ? <Typography variant={"subtitle1"} fontWeight={"bold"} className={'text-gray'}>Du hast noch kein Rauchstopp-Datum gesetzt</Typography>
+            {!isTracking ? <StyledPlaceholderPaper style={{backgroundColor: 'rgb(255, 69, 0,0.7)', marginTop: '16px'}}>Du hast noch kein Rauchstopp-Datum festgelegt</StyledPlaceholderPaper>
                 : (
                     <>
                         <Typography variant={"subtitle1"} fontWeight={"bold"} className={'text-gray'}>
