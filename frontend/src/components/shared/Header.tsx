@@ -24,8 +24,6 @@ export default function Header({user, logout}: Readonly<HeaderProps>) {
         handleClose();
     };
 
-    console.log('User data in Header:', user);
-
     return (
         <header>
             <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", height: 1}}>

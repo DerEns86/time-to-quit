@@ -18,8 +18,6 @@ export default function DialogAddNewGoal(props: Readonly<Dialog_AddNewGoalProps>
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("Goal Name: ", goalName);
-        console.log("Goal Price: ", goalPrice);
         const newGoal: GoalDTO = {
             goalName: goalName,
             goalPrice: goalPrice
@@ -30,7 +28,6 @@ export default function DialogAddNewGoal(props: Readonly<Dialog_AddNewGoalProps>
                     const addedGoal = response.data;
                     setGoals(prevGoals => [...prevGoals, addedGoal]);
                     props.addGoal(addedGoal);
-                    console.log(props.user?.goals);
                     console.log(goals)
                     props.user?.goals.push(addedGoal);
                 })

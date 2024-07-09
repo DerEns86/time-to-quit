@@ -46,7 +46,6 @@ export default function SmokeFreeTracker( {user, isTracking, setIsTracking} : Re
             .catch((error) => {
                 console.error('Error starting tracking', error);
             });
-        console.log(`Tracking started with ${cigarettes} cigarettes`);
     };
 
     const handleConfirmDialog = () => {

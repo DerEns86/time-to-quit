@@ -34,8 +34,6 @@ export default function Tips() {
         }
 
         fetchData();
-        console.log("tips: ", tips)
-        console.log("motivations: ", motivations)
     }, []);
 
     return (

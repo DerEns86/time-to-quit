@@ -34,7 +34,6 @@ export async function startTracking(user : githubUser, cigarettes: number){
 
         try{
            await updateUser(updatedUser, user.id)
-              console.log('User updated', updatedUser);
         } catch (error) {
             console.error('Error updating user', error);
         }
@@ -49,7 +48,6 @@ export async function stopTracking(user: githubUser) {
     };
     try {
         const response = await updateUser(updatedUser, user.id);
-        console.log('User updated', response.data);
         return response.data;
     } catch (error) {
         console.error('Error updating user', error);
@@ -66,7 +64,6 @@ export async function updateUserMotivation(user: githubUser, newMotivation: stri
     };
     try {
         const response = await updateUser(updatedUser, user.id);
-        console.log('User updated', response.data);
         return response.data;
     } catch (error) {
         console.error('Error updating user', error);
