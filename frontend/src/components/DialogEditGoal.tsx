@@ -19,7 +19,6 @@ export default function DialogEditGoal({ user, goal, open, handleClose }: Readon
         // Update the goal
         goal.goalName = goalName;
         goal.goalPrice = goalPrice;
-        console.log("fetched user:", user?.id);
 
         if (user) {
             const goalIndex = user.goals.findIndex(g => g.goalId === goal.goalId);

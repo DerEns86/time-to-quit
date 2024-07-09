@@ -36,7 +36,6 @@ function App() {
         const fetchData = async () => {
             const user = await loadUser();
             setUser(user);
-            console.log(user);
             if (user) {
                 const response = await loadGoals(user.id);
                 setGoals(response.data);

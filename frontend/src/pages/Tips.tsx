@@ -34,12 +34,10 @@ export default function Tips() {
         }
 
         fetchData();
-        console.log("tips: ", tips)
-        console.log("motivations: ", motivations)
     }, []);
 
     return (
-        <section style={{marginTop: "10vh"}}>
+        <section style={{marginTop: "calc(50% - 80px)"}}>
             <Typography variant={"h6"} fontWeight={"bold"} textAlign={"center"} className={"text-gray"} my={0.9}>Tipps</Typography>
 
 

@@ -20,8 +20,6 @@ export default function GoalSingleItem({goal, user, deleteGoal}: Readonly<GoalSi
         setEditOpen(false);
     };
 
-    console.log("GoalSingleItem user:", user);
-
     return (
         <StyledGoalPaper elevation={8} key={goal.goalId} >
             <Box sx={{

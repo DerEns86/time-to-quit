@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import {githubUser} from "../model/userModel.ts";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import {useState} from "react";
+import React, {useState} from "react";
 import {updateUserMotivation} from "../service/userService.ts";
 import {StyledMotivationPaper} from "./styles.ts";
 
@@ -43,7 +43,8 @@ export default function Motivation({user}: Readonly<{ user: githubUser }>) {
         setStopSnackbarOpen(false);
     };
 
-    const handleAddMotivation = () => {
+    const handleAddMotivation = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         if (newMotivation.trim() === '') {
             setError('Motivation darf nicht leer sein');
             return;
@@ -88,7 +89,12 @@ export default function Motivation({user}: Readonly<{ user: githubUser }>) {
             <Button color="primary" variant={"outlined"} onClick={handleOpenDialog}>
                 Hinzufügen
             </Button>
-            <Dialog open={open} onClose={handleCloseDialog}>
+            <Dialog open={open} onClose={handleCloseDialog}
+                    PaperProps={{
+                        component: 'form',
+                        onSubmit: handleAddMotivation,
+                    }}
+            >
                 <DialogTitle>Neue Motivation hinzufügen</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -111,7 +117,7 @@ export default function Motivation({user}: Readonly<{ user: githubUser }>) {
                     <Button onClick={handleCloseDialog} color="primary">
                         Abbrechen
                     </Button>
-                    <Button onClick={handleAddMotivation} color="primary">
+                    <Button type="submit" color="primary">
                         Speichern
                     </Button>
                 </DialogActions>

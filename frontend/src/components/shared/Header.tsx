@@ -24,15 +24,13 @@ export default function Header({user, logout}: Readonly<HeaderProps>) {
         handleClose();
     };
 
-    console.log('User data in Header:', user);
-
     return (
         <header>
             <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", height: 1}}>
                 <h1>Time to Quit</h1>
                 {user && (
                     <div>
-                        <Button onClick={handleClick} sx={{width: '24px', height: '24px', minWidth: 'unset', p: 0}}>
+                        <Button onClick={handleClick} sx={{width: '40px', height: '40px', minWidth: 'unset', p: 0}}>
                             <Avatar sx={{color: 'black', width: 1, height: 1}} src={user.avatar_url} alt={user.username}/>
                         </Button>
                         <Menu

@@ -78,3 +78,17 @@ export const StyledHealthPaper = styled(Paper)(({ theme }) => ({
     width: 'calc(100% - 32px)',
     maxWidth: '400px',
 }));
+
+export const StyledPlaceholderPaper = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(3, 2),
+    marginInline: '16px',
+    marginBottom: theme.spacing(5),
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    color: 'whitesmoke',
+    width: 'calc(100% - 32px)',
+    maxWidth: '400px',
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+}));
