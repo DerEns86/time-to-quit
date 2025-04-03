@@ -14,7 +14,7 @@
     <name>backend</name>
     <description>backend</description>
     <properties>
-        <java.version>22</java.version>
+        <java.version>21</java.version>
         <sonar.organization>derens86</sonar.organization>
         <sonar.projectName>Time to Quit</sonar.projectName>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
