@@ -43,7 +43,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21' # must match the version in the pom.xml
+          java-version: '22' # must match the version in the pom.xml
           distribution: 'temurin'
           cache: 'maven'
 
