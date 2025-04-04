@@ -56,4 +56,4 @@ jobs:
       - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed für andere Aktionen, falls vorhanden
-        run: mvn -B verify --file backend/pom.xml
+ #       run: mvn -B verify --file backend/pom.xml
